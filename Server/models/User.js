@@ -1,83 +1,75 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  user_id: {
-    type: String,
-    required: true,
-  },
-  added_by: {
-    type: String,
-    required: true,
-  },
-  address_title: {
-    type: String,
-    required: true,
-  },
-  is_default: {
-    type: Boolean,
-    default: false,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  phone_number: {
-    type: Number,
-    required: true,
-    minlength: 10,
-    maxlength: 15,
-  },
-  alt_phone_number: {
-    type: Number,
-    minlength: 10,
-    maxlength: 15,
-  },
-  email: {
-    type: String,
-    required: true,
-    match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  },
-  address_line_one: {
-    type: String,
-    required: true,
-  },
-  address_line_2: {
-    type: String,
-    default: '',
-  },
-  pin_code_id: {
-    type: Number,
-    required: true,
-  },
-  city: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: Boolean,
-    default: true,
-  },
-  created_at: {
-    type: Date,
-    default: Date.now,
-  },
-  updated_at: {
-    type: Date,
-    default: Date.now,
-  },
-  deleted_at: {
-    type: Date,
-    default: null,
-  },
-}, {
-  timestamps: true, // Automatically manages created_at and updated_at
+    id: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    phone_number: {
+        type: String,
+        required: true
+    },
+    Class: {
+        type: String,
+        enum: ['5', '12', 'all'],
+        required: true
+    },
+    board: {
+        type: String,
+        enum: ['wb', 'ics', 'cbs', 'all'],
+        required: true
+    },
+    guardian_number: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    payment_ss: {
+        type: [String], // Assuming image URLs/paths are stored as strings
+        required: false
+    },
+    payment_status: {
+        type: Boolean,
+        default: false
+    },
+    date_of_approval: {
+        type: Date,
+        required: false
+    },
+    date_of_admission: {
+        type: Date,
+        required: false
+    },
+    active_status: {
+        type: Boolean,
+        default: true
+    },
+    exam_score: {
+        type: [Number], // List of integers
+        required: false
+    },
+    attendance: {
+        type: Number,
+        default: 0
+    },
+    is_admin: {
+        type: Boolean,
+        default: false
+    }
 });
 
-// Exporting the User model
 const User = mongoose.model('User', UserSchema);
+
 module.exports = User;
