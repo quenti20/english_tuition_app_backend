@@ -25,10 +25,12 @@ exports.createNewUser = async (req, res) => {
             return res.status(400).json({ message: 'All required fields must be provided' });
         }
 
-        // Format DOB to ddmmyyyy for password
-        const formattedDOB = new Date(DOB);
-        const password = `${String(formattedDOB.getDate()).padStart(2, '0')}${String(formattedDOB.getMonth() + 1).padStart(2, '0')}${formattedDOB.getFullYear()}`;
-
+        // // Format DOB to ddmmyyyy for password
+        // const formattedDOB = new Date(DOB);
+        // console.log(formattedDOB);
+        // const password = `${String(formattedDOB.getDate()).padStart(2, '0')}${String(formattedDOB.getMonth() + 1).padStart(2, '0')}${formattedDOB.getFullYear()}`;
+        // console.log(formattedDOB.getDate())
+        const password = DOB ;
         const newUser = new User({
             name,
             email,
@@ -159,6 +161,37 @@ exports.deleteUser = async (req, res) => {
             message: 'User deleted successfully',
             user: deletedUser
         });
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred', error: error.message });
+    }
+};
+
+exports.changePassword = async (req, res) => {
+    try {
+        const { id } = req.params; // User ID from route params
+        const { oldPassword, newPassword } = req.body; // Old and new passwords from request body
+
+        // Validate input
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({ message: 'Old password and new password are required' });
+        }
+
+        // Find user by ID
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Verify old password
+        if (user.password !== oldPassword) {
+            return res.status(400).json({ message: 'Old password is incorrect' });
+        }
+
+        // Update user's password
+        user.password = newPassword;
+        await user.save();
+
+        res.status(200).json({ message: 'Password updated successfully' });
     } catch (error) {
         res.status(500).json({ message: 'An error occurred', error: error.message });
     }

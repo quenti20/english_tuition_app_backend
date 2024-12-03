@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
     },
     board: {
         type: String,
-        enum: ['WB', 'ICSE', 'CBSE', 'All'],
+        enum: ['WBSE', 'CISCE', 'CBSE', 'All'],
         required: true
     },
     guardian_number: {
@@ -33,7 +33,7 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
     DOB:{
-        type: Date,
+        type: String,
         required: true
     },
     password: {
