@@ -1,0 +1,34 @@
+Admission: (post)
+ name String
+  email String
+  phone_number String
+  Class enum(5_12_all)
+  board enum(wb_ics_cbs_all)
+  gurdian_nmber String
+  dob (password) String
+  payment_ss image
+
+
+Login: (post)
+  email String
+  password String
+  RESPONSE: User
+
+CRUD Update_profile: (post)
+  User
+
+CRD on Teachers
+
+CRD on data
+
+CRD on alumni
+
+CRD on publication
+
+CRD on notes
+
+CRD on Fees
+
+CRD on Schedule
+
+Queries (post)

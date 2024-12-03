@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     id: {
         type: String,
-        required: true
+        required: false
     },
     name: {
         type: String,
@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        
     },
     phone_number: {
         type: String,
@@ -20,16 +20,20 @@ const UserSchema = new mongoose.Schema({
     },
     Class: {
         type: String,
-        enum: ['5', '12', 'all'],
+        enum: ['5','6','7','8','9','10','11','12', 'all'],
         required: true
     },
     board: {
         type: String,
-        enum: ['wb', 'ics', 'cbs', 'all'],
+        enum: ['WB', 'ICSE', 'CBSE', 'All'],
         required: true
     },
     guardian_number: {
         type: String,
+        required: true
+    },
+    DOB:{
+        type: Date,
         required: true
     },
     password: {
@@ -48,7 +52,7 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         required: false
     },
-    date_of_admission: {
+    date_of_admission_request: {
         type: Date,
         required: false
     },
