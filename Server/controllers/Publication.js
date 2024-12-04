@@ -1,70 +1,74 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-// const {CloudinaryStorage} = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const Publication = require('../models/Publication');
 
-// // Configure Cloudinary
-// cloudinary.config({
-//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // Set these in Vercel environment variables
-//     api_key: process.env.CLOUDINARY_API_KEY,
-//     api_secret: process.env.CLOUDINARY_API_SECRET,
-// });
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: "dm9lmh6bm", // Set these in Vercel environment variables
+    api_key: "793954583182985",
+    api_secret: "NjbYEgZV7Sm07VkOTo8VFweoXvg",
+});
 
-// // Configure Cloudinary storage for multer
-// const storage = new CloudinaryStorage({
-//     cloudinary: cloudinary,
-//     params: {
-//         folder: 'publication_uploads', // Folder in your Cloudinary account
-//         allowed_formats: ['jpeg', 'jpg', 'png'], // Allowed file formats
-//     },
-// });
+// Configure Cloudinary storage for multer
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'publication_uploads', // Folder in your Cloudinary account
+        allowed_formats: ['jpeg', 'jpg', 'png'], // Allowed file formats
+    },
+});
+
+const upload = multer({ storage: storage });
+
 
 
 //Ensure directories exist or create them
-const ensureDirectories = () => {
-    const uploadDir = 'uploads';
-    const publicationDir = path.join(uploadDir, 'publication_uploads');
+// const ensureDirectories = () => {
+//     const uploadDir = 'uploads';
+//     const publicationDir = path.join(uploadDir, 'publication_uploads');
 
-    if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir);
-    }
+//     if (!fs.existsSync(uploadDir)) {
+//         fs.mkdirSync(uploadDir);
+//     }
 
-    if (!fs.existsSync(publicationDir)) {
-        fs.mkdirSync(publicationDir);
-    }
+//     if (!fs.existsSync(publicationDir)) {
+//         fs.mkdirSync(publicationDir);
+//     }
 
-    return publicationDir;
-};
+//     return publicationDir;
+// };
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const publicationDir = ensureDirectories();
-        cb(null, publicationDir); // Set the destination folder
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
-    }
-});
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         const publicationDir = ensureDirectories();
+//         cb(null, publicationDir); // Set the destination folder
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
+//     }
+// });
 
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB limit
-    fileFilter: function (req, file, cb) {
-        const fileTypes = /jpeg|jpg|png/;
-        const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = fileTypes.test(file.mimetype);
+// const upload = multer({
+//     storage: storage,
+//     limits: { fileSize: 1 * 1024 * 1024 }, // 1MB limit
+//     fileFilter: function (req, file, cb) {
+//         const fileTypes = /jpeg|jpg|png/;
+//         const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+//         const mimetype = fileTypes.test(file.mimetype);
 
-        if (extname && mimetype) {
-            return cb(null, true);
-        } else {
-            cb(new Error('Only .jpeg, .jpg, and .png files are allowed'));
-        }
-    }
-}).single('image'); // Single image upload
+//         if (extname && mimetype) {
+//             return cb(null, true);
+//         } else {
+//             cb(new Error('Only .jpeg, .jpg, and .png files are allowed'));
+//         }
+//     }
+// }).single('image'); // Single image upload
 
 exports.createPublication = async (req, res) => {
-    upload(req, res, async (err) => {
+    upload.single('image')(req, res, async (err) => {
         if (err) {
             return res.status(400).json({ message: err.message });
         }
@@ -77,7 +81,7 @@ exports.createPublication = async (req, res) => {
             }
 
             const newPublication = new Publication({
-                image: req.file.path, // Store the file path
+                image: req.file.path, // Cloudinary URL
                 name,
                 author,
                 link,
