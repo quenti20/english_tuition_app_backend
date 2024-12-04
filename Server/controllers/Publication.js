@@ -1,51 +1,51 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const {CloudinaryStorage} = require('multer-storage-cloudinary');
+// const {CloudinaryStorage} = require('multer-storage-cloudinary');
 const Publication = require('../models/Publication');
 
-// Configure Cloudinary
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // Set these in Vercel environment variables
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-// Configure Cloudinary storage for multer
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'publication_uploads', // Folder in your Cloudinary account
-        allowed_formats: ['jpeg', 'jpg', 'png'], // Allowed file formats
-    },
-});
-
-
-// Ensure directories exist or create them
-// const ensureDirectories = () => {
-//     const uploadDir = 'uploads';
-//     const publicationDir = path.join(uploadDir, 'publication_uploads');
-
-//     if (!fs.existsSync(uploadDir)) {
-//         fs.mkdirSync(uploadDir);
-//     }
-
-//     if (!fs.existsSync(publicationDir)) {
-//         fs.mkdirSync(publicationDir);
-//     }
-
-//     return publicationDir;
-// };
-
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         const publicationDir = ensureDirectories();
-//         cb(null, publicationDir); // Set the destination folder
-//     },
-//     filename: function (req, file, cb) {
-//         cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
-//     }
+// // Configure Cloudinary
+// cloudinary.config({
+//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // Set these in Vercel environment variables
+//     api_key: process.env.CLOUDINARY_API_KEY,
+//     api_secret: process.env.CLOUDINARY_API_SECRET,
 // });
+
+// // Configure Cloudinary storage for multer
+// const storage = new CloudinaryStorage({
+//     cloudinary: cloudinary,
+//     params: {
+//         folder: 'publication_uploads', // Folder in your Cloudinary account
+//         allowed_formats: ['jpeg', 'jpg', 'png'], // Allowed file formats
+//     },
+// });
+
+
+//Ensure directories exist or create them
+const ensureDirectories = () => {
+    const uploadDir = 'uploads';
+    const publicationDir = path.join(uploadDir, 'publication_uploads');
+
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir);
+    }
+
+    if (!fs.existsSync(publicationDir)) {
+        fs.mkdirSync(publicationDir);
+    }
+
+    return publicationDir;
+};
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const publicationDir = ensureDirectories();
+        cb(null, publicationDir); // Set the destination folder
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
+    }
+});
 
 const upload = multer({
     storage: storage,
