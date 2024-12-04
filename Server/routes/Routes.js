@@ -30,6 +30,9 @@ router.delete('/deleteTest/:id',testController.deleteTest)
 
 router.post('/createPublication',publicationController.createPublication)
 router.get('/getAllPublications',publicationController.getPublicationDetails)
+router.put('/updatePublication/:id',publicationController.updatePublication)
+router.delete('/deletePublication/:id',publicationController.deletePublication)
+
 
 
 module.exports = router ;
