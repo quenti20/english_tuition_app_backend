@@ -11,11 +11,11 @@ const TeacherSchema = new mongoose.Schema({
     },
     qualifications: {
         type: String,
-        required: true
+        required: false
     },
     image: {
         type: String, // Assuming the image is stored as a URL or file path
-        required: true
+        required: false
     }
 });
 
