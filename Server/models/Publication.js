@@ -15,11 +15,11 @@ const PublicationSchema = new mongoose.Schema({
     },
     link: {
         type: String, // URL linking to the publication
-        required: true
+        required: false
     },
     desc: {
         type: String, // Description of the publication
-        required: true
+        required: false
     },
     user_login: {
         type: Boolean, // Indicates if login is required to access the publication

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const QuestionSchema = new mongoose.Schema({
+const TestSchema = new mongoose.Schema({
     question: {
         type: String,
         required: true
@@ -15,23 +15,33 @@ const QuestionSchema = new mongoose.Schema({
         required: true,
         min: 0,
         max: 3
-    }
-});
-
-const TestSchema = new mongoose.Schema({
-    questions: {
-        type: [QuestionSchema], // List of questions
-        required: true
     },
-    class: {
-        type: Number, // Represents the class/grade
+    Class: {
+        type: String,
+        enum: ['5','6','7','8','9','10','11','12', 'all'],
         required: true
     },
     board: {
-        type: Number, // Represents the board ID or code
-        required: true
+        type: String,
+        enum: ['WBSE', 'CISCE', 'CBSE', 'All'],
+        required: false
     }
 });
+
+// const TestSchema = new mongoose.Schema({
+//     questions: {
+//         type: [QuestionSchema], // List of questions
+//         required: true
+//     },
+//     class: {
+//         type: Number, // Represents the class/grade
+//         required: true
+//     },
+//     board: {
+//         type: Number, // Represents the board ID or code
+//         required: true
+//     }
+// });
 
 const Test = mongoose.model('Test', TestSchema);
 

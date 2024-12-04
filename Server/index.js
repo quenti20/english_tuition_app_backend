@@ -4,12 +4,16 @@ const mongoose = require("mongoose")
 const app = express()
 const dataRoutes = require("./routes/Routes")
 const bodyparser = require('body-parser')
+const path = require('path');
 
 app.use(bodyparser.json());
 
 app.use(cors({
     origin: 'http://localhost:3000'
 }));
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 mongoose.connect("mongodb+srv://quenti_20:upxAiJ7pECmGWHGu@tuitionapp.l19bm.mongodb.net/English_Tuition") ;
 

@@ -7,7 +7,7 @@ const AlumniSchema = new mongoose.Schema({
     },
     image: {
         type: String, // URL or file path for the alumni image
-        required: true
+        required: false
     },
     school: {
         type: String,
