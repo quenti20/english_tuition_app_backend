@@ -21,7 +21,7 @@ const storage = new CloudinaryStorage({
     },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage }); 
 
 
 
@@ -101,15 +101,10 @@ exports.getPublicationDetails = async (req, res) => {
     try {
         const publications = await Publication.find();
 
-        // Modify the image path to be accessible via URL
-        const publicationsWithImageURL = publications.map(publication => ({
-            ...publication._doc,
-            image: `${req.protocol}://${req.get('host')}/${publication.image}`
-        }));
 
         res.status(200).json({
             message: 'Publications retrieved successfully',
-            publications: publicationsWithImageURL
+            publications
         });
     } catch (error) {
         res.status(500).json({ message: 'An error occurred', error: error.message });
