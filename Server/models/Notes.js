@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const NoteSchema = new mongoose.Schema({
+    notes_name: {
+        type: String,
+        required:true
+    },
     user_login: {
         type: Boolean, // Indicates if login is required to access the note
         default: false
@@ -9,12 +13,14 @@ const NoteSchema = new mongoose.Schema({
         type: String, // URL or file path for the PDF file
         required: true
     },
-    class: {
-        type: Number, // Represents the class/grade
+    Class: {
+        type: String,
+        enum: ['5','6','7','8','9','10','11','12', 'all'],
         required: true
     },
     board: {
-        type: Number, // Represents the board ID or code
+        type: String,
+        enum: ['WBSE', 'CISCE', 'CBSE', 'All'],
         required: true
     },
     image: {

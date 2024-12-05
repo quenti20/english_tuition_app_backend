@@ -112,7 +112,7 @@ exports.getPublicationDetails = async (req, res) => {
 };
 
 exports.updatePublication = (req, res) => {
-    upload(req, res, async (err) => {
+    upload.single('image')(req, res, async (err) => {
         if (err) {
             return res.status(400).json({ message: err.message });
         }
@@ -127,12 +127,13 @@ exports.updatePublication = (req, res) => {
             }
 
             if (req.file) {
-                // Delete old image file if a new image is uploaded
+                // If a new image is uploaded, delete the old one from Cloudinary
                 if (publication.image) {
-                    fs.unlinkSync(publication.image);
+                    const publicId = publication.image.split('/').pop().split('.')[0]; // Extract public ID
+                    await cloudinary.uploader.destroy(`publication_uploads/${publicId}`);
                 }
 
-                publication.image = req.file.path;
+                publication.image = req.file.path; // Update with the new Cloudinary URL
             }
 
             // Update other fields
@@ -149,6 +150,7 @@ exports.updatePublication = (req, res) => {
         }
     });
 };
+
 
 exports.deletePublication = async (req, res) => {
     try {

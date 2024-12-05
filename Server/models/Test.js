@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const TestSchema = new mongoose.Schema({
+    Chapter_name: {
+        type: String,
+        required: true
+    },
     question: {
         type: String,
         required: true
