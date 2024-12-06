@@ -7,6 +7,10 @@ const testController = require('../controllers/Test')
 const publicationController = require('../controllers/Publication')
 const dataController = require('../controllers/Data')
 const notesController = require('../controllers/Notes')
+const bannerController = require('../controllers/Banner')
+const feeController = require('../controllers/Fee')
+const gallery_imagesController = require('../controllers/GalleryImages')
+const scheduleController = require('../controllers/Schedule')
 
 router.post('/newUser',userController.createNewUser)
 router.post('/login',userController.userLogin)
@@ -44,5 +48,26 @@ router.post('/createNotes',notesController.createNotes)
 router.get('/getAllNotes',notesController.getAllNotes)
 router.put('/updateNotes/:id',notesController.updateNote)
 router.delete('/deleteNote/:id',notesController.deleteNote)
+
+
+router.post('/createBanner',bannerController.createBanner)
+router.get('/getAllBanners',bannerController.getAllBanners)
+router.put('/updateBanner/:id',bannerController.updateBanner)
+router.delete('/deleteBanner/:id',bannerController.deleteBanner)
+
+router.post('/createFee',feeController.createFee)
+router.get('/getAllFee',feeController.getAllFees)
+router.put('/updateFee/:id',feeController.updateFee)
+router.delete('/deleteFee/:id',feeController.deleteFee) 
+
+router.post('/createGalleryImage',gallery_imagesController.createGalleryImage)
+router.get('/getAllGalleryImages',gallery_imagesController.getAllGalleryImages)
+router.put('/updateGalleryImage/:id',gallery_imagesController.updateGalleryImage)
+router.delete('/deleteGalleryImage/:id',gallery_imagesController.deleteGalleryImage) 
+
+router.post('/createSchedule',scheduleController.createSchedule)
+router.get('/getAllSchedules',scheduleController.getAllSchedules)
+router.put('/updateSchedule/:id',scheduleController.updateSchedule)
+router.delete('/deleteSchedule/:id',scheduleController.deleteSchedule) 
 
 module.exports = router ;
