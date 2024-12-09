@@ -17,7 +17,7 @@ app.use(cors({
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
-mongoose.connect("mongodb+srv://quenti_20:upxAiJ7pECmGWHGu@tuitionapp.l19bm.mongodb.net/English_Tuition") ;
+mongoose.connect("mongodb+srv://linguist_admin:Thelinguist@linguist.sc870.mongodb.net/LinguistDB") ; 
 
 // password: gU4JswYqTHvf5NbR
 

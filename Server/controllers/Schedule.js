@@ -3,18 +3,17 @@ const Schedule = require('../models/Schedule'); // Adjust path based on your pro
 // Create a new schedule
 exports.createSchedule = async (req, res) => {
     try {
-        const { class: className, board, type, time } = req.body;
+        const { Class, literature_time,grammer_time} = req.body;
 
         // Validate required fields
-        if (!className || !board || !type || !time) {
+        if (!Class) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
         const newSchedule = new Schedule({
-            class: className,
-            board,
-            type,
-            time,
+            Class,
+            literature_time,
+            grammer_time
         });
 
         await newSchedule.save();
@@ -57,7 +56,7 @@ exports.getScheduleById = async (req, res) => {
 exports.updateSchedule = async (req, res) => {
     try {
         const { id } = req.params;
-        const { class: className, board, type, time } = req.body;
+        const { Class, literature_time,grammer_time } = req.body;
 
         const schedule = await Schedule.findById(id);
         if (!schedule) {
@@ -65,10 +64,10 @@ exports.updateSchedule = async (req, res) => {
         }
 
         // Update fields if provided in request
-        if (className) schedule.class = className;
-        if (board) schedule.board = board;
-        if (type) schedule.type = type;
-        if (time) schedule.time = time;
+        if (Class) schedule.Class = Class;
+        if (literature_time) schedule.board = literature_time;
+        if (grammer_time) schedule.type = grammer_time;
+    
 
         await schedule.save();
         res.status(200).json({ message: 'Schedule updated successfully', schedule });

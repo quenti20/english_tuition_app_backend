@@ -7,9 +7,9 @@ const Publication = require('../models/Publication');
 
 // Configure Cloudinary
 cloudinary.config({
-    cloud_name: "dm9lmh6bm", // Set these in Vercel environment variables
-    api_key: "793954583182985",
-    api_secret: "NjbYEgZV7Sm07VkOTo8VFweoXvg",
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // Set these in Vercel environment variables
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 // Configure Cloudinary storage for multer
