@@ -10,6 +10,11 @@ const ScheduleSchema = new mongoose.Schema({
     },
     grammer_time: {
         type: String,
+    },
+    board: {
+        type: String,
+        enum: ['WBSE', 'CISCE', 'CBSE', 'All'],
+        required: true
     }
 });
 

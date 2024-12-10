@@ -3,7 +3,7 @@ const Schedule = require('../models/Schedule'); // Adjust path based on your pro
 // Create a new schedule
 exports.createSchedule = async (req, res) => {
     try {
-        const { Class, literature_time,grammer_time} = req.body;
+        const { Class, literature_time,grammer_time,board} = req.body;
 
         // Validate required fields
         if (!Class) {
@@ -13,7 +13,8 @@ exports.createSchedule = async (req, res) => {
         const newSchedule = new Schedule({
             Class,
             literature_time,
-            grammer_time
+            grammer_time,
+            board
         });
 
         await newSchedule.save();
@@ -65,8 +66,9 @@ exports.updateSchedule = async (req, res) => {
 
         // Update fields if provided in request
         if (Class) schedule.Class = Class;
-        if (literature_time) schedule.board = literature_time;
-        if (grammer_time) schedule.type = grammer_time;
+        if (literature_time) schedule.literature_time = literature_time;
+        if (grammer_time) schedule.grammer_time = grammer_time;
+        if (board) schedule.board = board;
     
 
         await schedule.save();

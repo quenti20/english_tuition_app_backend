@@ -1,132 +1,158 @@
-const User = require('../models/User'); // Adjust path as per your structure
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+const User = require('../models/User');
 
-exports.createNewUser = async (req, res) => {
-    try {
-        const {
-            id,
-            name,
-            email,
-            phone_number,
-            Class,
-            board,
-            guardian_number,
-            DOB,
-            payment_ss,
-            payment_status,
-            date_of_approval,
-            active_status,
-            exam_score,
-            attendance,
-            is_admin
-        } = req.body;
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-        // Validate required fields
-        if (!name || !email || !phone_number || !Class || !board || !guardian_number || !DOB) {
-            return res.status(400).json({ message: 'All required fields must be provided' });
+// Configure Cloudinary storage for Multer
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'payment_screenshots', // Folder for payment screenshots
+        allowed_formats: ['jpeg', 'jpg', 'png'], // Allowed image formats
+    },
+});
+
+const upload = multer({ storage });
+
+// Create a new user
+exports.createNewUser = (req, res) => {
+    upload.single('payment_ss')(req, res, async (err) => {
+        if (err) {
+            return res.status(400).json({ message: err.message });
+            console.log(err)
         }
 
-        // // Format DOB to ddmmyyyy for password
-        // const formattedDOB = new Date(DOB);
-        // console.log(formattedDOB);
-        // const password = `${String(formattedDOB.getDate()).padStart(2, '0')}${String(formattedDOB.getMonth() + 1).padStart(2, '0')}${formattedDOB.getFullYear()}`;
-        // console.log(formattedDOB.getDate())
-        const password = DOB ;
-        const newUser = new User({
-            name,
-            email,
-            phone_number,
-            Class,
-            board,
-            guardian_number,
-            DOB,
-            password, // Consider hashing the password before saving
-            payment_ss,
-            payment_status,
-            date_of_approval,
-            date_of_admission_request: new Date(),
-            active_status,
-            exam_score,
-            attendance,
-            is_admin
-        });
+        try {
+            const {
+                name,
+                email,
+                phone_number,
+                Class,
+                board,
+                guardian_number,
+                DOB,
+                payment_status,
+                date_of_approval,
+                active_status,
+                exam_score,
+                attendance,
+                is_admin,
+            } = req.body;
 
-        await newUser.save();
-        res.status(201).json({ message: 'User created successfully', user: newUser });
-        //res.status(200).json({ message: 'User created successfully', user: newUser });
-    } catch (error) {
-        res.status(500).json({ message: 'An error occurred', error: error.message });
-    }
+            // Validate required fields
+            if (!name || !email || !phone_number || !Class || !board || !guardian_number || !DOB) {
+                return res.status(400).json({ message: 'All required fields must be provided' });
+            }
+
+            const password = DOB;  // Use DOB as the initial password (consider hashing for production)
+
+            // Check if payment screenshot is provided
+            if (!req.file) {
+                return res.status(400).json({ message: 'Payment screenshot is required' });
+            }
+
+            const newUser = new User({
+                name,
+                email,
+                phone_number,
+                Class,
+                board,
+                guardian_number,
+                DOB,
+                password,
+                payment_ss: req.file.path, // Store Cloudinary URL
+                payment_status,
+                date_of_approval,
+                date_of_admission_request: new Date(),
+                active_status,
+                exam_score,
+                attendance,
+                is_admin,
+            });
+
+            await newUser.save();
+            res.status(201).json({ message: 'User created successfully', user: newUser });
+        } catch (error) {
+            res.status(500).json({ message: 'An error occurred', error: error.message });
+        }
+    });
 };
 
-exports.userLogin = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        // Validate input
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Email and password are required' });
+// Update an existing user
+exports.updateUser = (req, res) => {
+    upload.single('payment_ss')(req, res, async (err) => {
+        if (err) {
+            return res.status(400).json({ message: err.message });
         }
 
-        // Find user by email
-        const user = await User.findOne({ email });
+        try {
+            const { id } = req.params;
+            const updates = req.body;
+
+            // Find the user by ID
+            const user = await User.findById(id);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            // Update the payment screenshot if a new one is uploaded
+            if (req.file) {
+                // Delete old payment screenshot from Cloudinary
+                if (user.payment_ss) {
+                    const publicId = user.payment_ss.split('/').pop().split('.')[0];
+                    await cloudinary.uploader.destroy(`payment_screenshots/${publicId}`);
+                }
+
+                updates.payment_ss = req.file.path; // Set new Cloudinary URL
+            }
+
+            // Update other fields
+            Object.assign(user, updates);
+
+            await user.save();
+            res.status(200).json({ message: 'User updated successfully', user });
+        } catch (error) {
+            res.status(500).json({ message: 'An error occurred', error: error.message });
+        }
+    });
+};
+
+// Delete a user
+exports.deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Find the user by ID
+        const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Check if the provided password matches the stored password
-        if (user.password !== password) {
-            return res.status(401).json({ message: 'Invalid password' });
+        // Delete payment screenshot from Cloudinary
+        if (user.payment_ss) {
+            const publicId = user.payment_ss.split('/').pop().split('.')[0];
+            await cloudinary.uploader.destroy(`payment_screenshots/${publicId}`);
         }
 
-        // Successful login
-        res.status(200).json({ 
-            message: 'Login successful', 
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                Class: user.Class,
-                board: user.board,
-                is_admin: user.is_admin
-            }
-        });
+        // Delete the user record from the database
+        await user.deleteOne();
+
+        res.status(200).json({ message: 'User deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'An error occurred', error: error.message });
     }
 };
 
-exports.updateUser = async (req, res) => {
-    try {
-        const { id } = req.params; // Assuming the user ID is passed as a route parameter
-        const updates = req.body; // Fields to update
-
-        // Validate if the user ID is provided
-        if (!id) {
-            return res.status(400).json({ message: 'User ID is required' });
-        }
-
-        // Find the user by ID and update the fields
-        const updatedUser = await User.findByIdAndUpdate(id, updates, {
-            new: true, // Return the updated document
-            runValidators: true // Ensure the updates follow schema validation
-        });
-
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        res.status(200).json({
-            message: 'User profile updated successfully',
-            user: updatedUser
-        });
-    } catch (error) {
-        res.status(500).json({ message: 'An error occurred', error: error.message });
-    }
-};
-
+// Get all users
 exports.getAllUsers = async (req, res) => {
     try {
-        // Retrieve all users from the database
         const users = await User.find();
 
         if (users.length === 0) {
@@ -135,37 +161,51 @@ exports.getAllUsers = async (req, res) => {
 
         res.status(200).json({
             message: 'Users retrieved successfully',
-            users
+            users,
         });
     } catch (error) {
         res.status(500).json({ message: 'An error occurred', error: error.message });
     }
 };
 
-exports.deleteUser = async (req, res) => {
+// User login
+exports.userLogin = async (req, res) => {
     try {
-        const { id } = req.params; // Assuming user ID is passed as a route parameter
+        const { email, password } = req.body;
 
-        // Validate if the user ID is provided
-        if (!id) {
-            return res.status(400).json({ message: 'User ID is required' });
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required' });
         }
 
-        // Find the user by ID and delete
-        const deletedUser = await User.findByIdAndDelete(id);
-
-        if (!deletedUser) {
+        const user = await User.findOne({ email });
+        if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        if (user.password !== password) {
+            return res.status(401).json({ message: 'Invalid password' });
+        }
+
         res.status(200).json({
-            message: 'User deleted successfully',
-            user: deletedUser
+            message: 'Login successful',
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                Class: user.Class,
+                board: user.board,
+                phone_number: user.phone_number,
+                guardian_number: user.guardian_number,
+                exam_score: user.exam_score,
+                attendance: user.attendance,
+                is_admin: user.is_admin
+            },
         });
     } catch (error) {
         res.status(500).json({ message: 'An error occurred', error: error.message });
     }
 };
+
 
 exports.changePassword = async (req, res) => {
     try {
@@ -197,5 +237,3 @@ exports.changePassword = async (req, res) => {
         res.status(500).json({ message: 'An error occurred', error: error.message });
     }
 };
-
-
