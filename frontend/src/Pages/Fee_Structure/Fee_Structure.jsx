@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from '../../Components/Navbar';
-import Footer from '../../Components/Footer';
+import Navbar from '../../Components/HomePage/Navbar';
+import Footer from '../../Components/HomePage/Footer';
 import fee_structure_pdf from './Revised_Fees_Structure_2024.pdf'
 
 const FeeStructure = () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import tabImage from "../Images/laptop.jpeg";
+import tabImage from "../../Images/laptop.jpeg";
 
 const Experts = () => {
   return (

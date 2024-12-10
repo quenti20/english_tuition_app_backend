@@ -8,7 +8,7 @@ const Gallery = () => {
 
   // Dynamically fetching images from the relative path
   const images = Array.from({ length: 13 }, (_, index) => {
-    return require(`../Images/Gallery_images/img_${index + 1}.jpg`);
+    return require(`../../Images/Gallery_images/img_${index + 1}.jpg`);
   });
 
   // Function to handle the next image

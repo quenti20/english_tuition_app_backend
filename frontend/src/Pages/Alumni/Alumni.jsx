@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from '../../Components/Navbar';
-import Footer from '../../Components/Footer';
+import Navbar from '../../Components/HomePage/Navbar';
+import Footer from '../../Components/HomePage/Footer';
 import studentData from './data.js';  // Importing student data
 
 const Alumni = () => {

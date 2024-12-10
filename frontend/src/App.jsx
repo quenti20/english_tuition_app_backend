@@ -1,12 +1,12 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './Components/Navbar';
-import Banner from './Components/Banner';
-import Experts from './Components/Experts';
-import Footer from './Components/Footer';
-import Gallery from './Components/Gallery';
-import NewsLetter from './Components/NewsLetter';
+import Navbar from './Components/HomePage/Navbar';
+import Banner from './Components/HomePage/Banner';
+import Experts from './Components/HomePage/Experts';
+import Footer from './Components/HomePage/Footer';
+import Gallery from './Components/HomePage/Gallery';
+import NewsLetter from './Components/HomePage/NewsLetter';
 import Fee_structure  from './Pages/Fee_Structure/Fee_Structure';
 import Schedule from './Pages/Schedule_Classes/Schedule';
 import Admission_Form from './Pages/Admission_Form/Admission_Form';

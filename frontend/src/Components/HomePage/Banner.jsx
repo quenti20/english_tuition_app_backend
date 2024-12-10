@@ -3,7 +3,7 @@
 import React from 'react';
 import { ReactTyped } from 'react-typed';
 import { useNavigate} from 'react-router-dom';
-import bannerImage from '../Pages/Publications/pub_1.jpg'
+import bannerImage from '../../Pages/Publications/pub_1.jpg'
 
 const Banner = () => {
 

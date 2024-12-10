@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from '../../Components/Navbar';
-import Footer from '../../Components/Footer';
+import Navbar from '../../Components/HomePage/Navbar';
+import Footer from '../../Components/HomePage/Footer';
 
 const WBSE = () => {
   // Dummy links for each class (you can replace these with your actual Google Drive links)
