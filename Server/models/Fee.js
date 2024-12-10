@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const FeeSchema = new mongoose.Schema({
-    class: {
+    Class: {
         type: String, // Represents the class/grade
         required: true
     },

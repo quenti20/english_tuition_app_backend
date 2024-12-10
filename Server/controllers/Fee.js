@@ -4,16 +4,16 @@ const Fee = require('../models/Fee'); // Adjust path based on your project struc
 // Create a new fee record
 exports.createFee = async (req, res) => {
     try {
-        const { class: className, fee } = req.body;
+        const { Class, fee } = req.body;
 
         // Validate request body
-        if (!className || fee == null) {
+        if (!Class || !fee) {
             return res.status(400).json({ message: 'Class and fee are required' });
         }
 
-        const newFee = new Fee({
-            class: className,
-            fee,
+        const newFee = new Fee({ 
+            Class,
+            fee
         });
 
         await newFee.save();
