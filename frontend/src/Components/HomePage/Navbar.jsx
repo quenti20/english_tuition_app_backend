@@ -3,13 +3,14 @@ import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 
 import Logo from './logo.png'; // Assuming your logo is in the same folder
+import ProfileIcon from './profile_icon.webp'; // Replace with your actual profile icon
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [showAdmissionDropdown, setShowAdmissionDropdown] = useState(false);
   const [showResourcesDropdown, setShowResourcesDropdown] = useState(false);
   const [showDownloadsDropdown, setShowDownloadsDropdown] = useState(false);
-
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const navigate = useNavigate();
 
   const handleNav = () => {
@@ -21,6 +22,8 @@ const Navbar = () => {
     setShowAdmissionDropdown(false);
     setShowResourcesDropdown(false);
     setShowDownloadsDropdown(false);
+    setShowDownloadsDropdown(false);
+    setShowProfileDropdown(false);
   };
 
   // Function to scroll to the bottom of the page
@@ -95,6 +98,20 @@ const Navbar = () => {
 
           {/* Contact Us Button */}
           <li className='p-4 cursor-pointer hover:bg-[#f6f8f8] hover:text-black rounded-xl' onClick={scrollToBottom}>Contact Us</li>
+          
+          {/* Profile Dropdown */}
+          <li className="relative p-4 cursor-pointer hover:bg-[#f6f8f8] hover:text-black rounded-xl"
+            onMouseEnter={() => setShowProfileDropdown(true)}
+            onMouseLeave={() => setShowProfileDropdown(false)}
+          >
+            <img src={ProfileIcon} alt="Profile" className="w-8 h-8 rounded-full" />
+            {showProfileDropdown && (
+              <ul className="absolute top-full right-0 bg-gray-800 text-white rounded-lg w-40 shadow-lg">
+                <li className="p-4 hover:bg-gray-700" onClick={() => navigate('/login')}>Login</li>
+                <li className="p-4 hover:bg-gray-700" onClick={() => navigate('/admission-form')}>Signup</li>
+              </ul>
+            )}
+          </li>        
         </ul>
 
         {/* Mobile Navigation Icon */}
@@ -111,6 +128,21 @@ const Navbar = () => {
           </div>
 
           <li className='p-4 border-b border-gray-600' onClick={() => navigate('/')}>Home</li>
+          
+          {/* Mobile Profile Dropdown */}
+          <li className="p-4 border-b border-gray-600" onClick={() => setShowProfileDropdown(!showProfileDropdown)}>
+            <div className="flex items-center">
+              <img src={ProfileIcon} alt="Profile" className="w-8 h-8 rounded-full mr-2" />
+              Profile
+            </div>
+            {showProfileDropdown && (
+              <ul className="pl-4">
+                <li className="p-2" onClick={() => navigate('/login')}>Login</li>
+                <li className="p-2" onClick={() => navigate('/admission-form')}>Signup</li>
+              </ul>
+            )}
+          </li>
+
 
           {/* Mobile Admission Dropdown */}
           <li className='p-4 border-b border-gray-600' onClick={() => setShowAdmissionDropdown(!showAdmissionDropdown)}>
@@ -150,6 +182,7 @@ const Navbar = () => {
 
           {/* Contact Us Button */}
           <li className='p-4 border-b border-gray-600' onClick={scrollToBottom}>Contact Us</li>
+
         </ul>
       </div>
     </div>

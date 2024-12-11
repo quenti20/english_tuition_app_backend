@@ -17,6 +17,17 @@ import WBSE from './Pages/WBSE/WBSE';
 import CBSE from './Pages/CBSE/CBSE';
 import CISCE from './Pages/CISCE/CISCE';
 import Privacy_Policy from './Pages/Privacy_Policy_regulations/Privacy_Policy'
+import Login from './Pages/Login/Login';
+import AdminDashboard from './Components/AdminPage/AdminDashboard';
+import AdminAlumni from './Components/AdminPage/AdminAlumni/AdminAlumni';
+import AdminBanner from './Components/AdminPage/AdminBanner/AdminBanner';
+import AdminFee from './Components/AdminPage/AdminFee/AdminFee';
+import AdminGallery from './Components/AdminPage/AdminGallery/AdminGallery';
+import AdminNotes from './Components/AdminPage/AdminNotes/AdminNotes';
+import AdminPublications from './Components/AdminPage/AdminPublications/AdminPublications';
+import AdminSchedule from './Components/AdminPage/AdminSchedule/AdminSchedule';
+import AdminTeacher from './Components/AdminPage/AdminTeacher/AdminTeacher';
+import AdminUsers from './Components/AdminPage/AdminUsers/AdminUsers';
 function App() {
   return (
     <Router>
@@ -59,12 +70,25 @@ function App() {
           <Route path="/faculty" element={<Faculty/> }  />
           <Route path="/publications" element={<Publications/> }  />
           <Route path="/alumni" element={<Alumni/> }  />
-          
+        
           <Route path="/wbse" element={<WBSE/> }  />
           <Route path="/cbse" element={<CBSE/> }  />
           <Route path="/cisce" element={<CISCE/> }  />
           <Route path="/privacy_policy" element={<Privacy_Policy/>}  />
+          <Route path="/login" element={<Login/>} />
           
+          <Route path="/admin" element={<AdminDashboard/>} />          
+          <Route path="/admin/alumni" element={<AdminAlumni/>} />
+          <Route path="/admin/banner" element={<AdminBanner/>} />
+          <Route path="/admin/fee" element={<AdminFee/>} />
+          <Route path="/admin/gallery-images" element={<AdminGallery/>} />
+          <Route path="/admin/notes" element={<AdminNotes/>} />
+          <Route path="/admin/publication" element={<AdminPublications/>} />
+          <Route path="/admin/schedule" element={<AdminSchedule/>} />
+          <Route path="/admin/teacher" element={<AdminTeacher/>} />
+          <Route path="/admin/users" element={<AdminUsers/>} />
+          
+
         </Routes>
       </div>
     </Router>

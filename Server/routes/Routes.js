@@ -26,8 +26,8 @@ router.delete('/deleteTeacher/:id',teacherController.deleteTeacher)
 
 router.post('/createAlumni',alumniController.createAlumni)
 router.get('/getAllAlumni',alumniController.getAllAlumni)
-router.put('/updateAlumni',alumniController.updateAlumni)
-router.delete('/deleteAlumni',alumniController.deleteAlumni)
+router.put('/updateAlumni/:id',alumniController.updateAlumni)
+router.delete('/deleteAlumni/:id',alumniController.deleteAlumni)
 
 router.post('/createTest',testController.createTest)
 router.get('/getAllTests',testController.getAllTests)
