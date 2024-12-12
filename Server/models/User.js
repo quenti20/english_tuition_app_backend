@@ -41,7 +41,7 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
     payment_ss: {
-        type: [String], // Assuming image URLs/paths are stored as strings
+        type: String, // Assuming image URLs/paths are stored as strings
         required: false
     },
     payment_status: {

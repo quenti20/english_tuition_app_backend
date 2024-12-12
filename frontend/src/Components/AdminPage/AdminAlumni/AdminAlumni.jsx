@@ -10,6 +10,15 @@ const AdminAlumni = () => {
 
   const apiUrl = 'https://english-tuition-app-backend.vercel.app';
 
+  // Check user authentication and permissions
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.is_admin || user.attendance !== 0) {
+      alert('Unauthorized access');
+      window.location.href = '/login';
+    }
+  }, []);
+
   const fetchAlumni = async () => {
     try {
       setLoading(true);
@@ -56,7 +65,7 @@ const AdminAlumni = () => {
 
     try {
       setLoading(true);
-      await axios.put(`${apiUrl}/updateAlumni/${updateAlumni.id}`, formData);
+      await axios.put(`${apiUrl}/updateAlumni?id=${updateAlumni.id}`, formData);
       fetchAlumni();
       setUpdateAlumni({ id: '', name: '', school: '', exam: '', marks: '', image: null });
       setLoading(false);
@@ -70,7 +79,7 @@ const AdminAlumni = () => {
     if (window.confirm('Are you sure you want to delete this alumni?')) {
       try {
         setLoading(true);
-        await axios.delete(`${apiUrl}/deleteAlumni/${id}`);
+        await axios.delete(`${apiUrl}/deleteAlumni?id=${id}`);
         fetchAlumni();
         setLoading(false);
       } catch (err) {

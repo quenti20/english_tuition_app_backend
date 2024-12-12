@@ -106,7 +106,7 @@ exports.updateUser = (req, res) => {
             if (req.file) {
                 // Delete old payment screenshot from Cloudinary
                 if (user.payment_ss) {
-                    const publicId = user.payment_ss.split('/').pop().split('.')[0];
+                    const publicId = getPublicIdFromUrl(user.payment_ss);
                     await cloudinary.uploader.destroy(`payment_screenshots/${publicId}`);
                 }
 
@@ -137,8 +137,8 @@ exports.deleteUser = async (req, res) => {
 
         // Delete payment screenshot from Cloudinary
         if (user.payment_ss) {
-            const publicId = user.payment_ss.split('/').pop().split('.')[0];
-            await cloudinary.uploader.destroy(`payment_screenshots/${publicId}`);
+            const publicId = getPublicIdFromUrl(user.payment_ss);
+            await cloudinary.uploader.destroy(publicId);
         }
 
         // Delete the user record from the database
@@ -154,7 +154,7 @@ exports.deleteUser = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find();
-
+            
         if (users.length === 0) {
             return res.status(404).json({ message: 'No users found' });
         }
@@ -198,7 +198,8 @@ exports.userLogin = async (req, res) => {
                 guardian_number: user.guardian_number,
                 exam_score: user.exam_score,
                 attendance: user.attendance,
-                is_admin: user.is_admin
+                is_admin: user.is_admin,
+                active_status:user.active_status
             },
         });
     } catch (error) {
@@ -237,3 +238,11 @@ exports.changePassword = async (req, res) => {
         res.status(500).json({ message: 'An error occurred', error: error.message });
     }
 };
+
+function getPublicIdFromUrl(url) {
+    const parts = url.split('/');
+    const fileWithExtension = parts[parts.length - 1];
+    const fileName = fileWithExtension.split('.')[0];
+    const folderPath = parts.slice(parts.indexOf('payment_screenshots') + 1, -1).join('/');
+    return `${folderPath}/${fileName}`;
+}

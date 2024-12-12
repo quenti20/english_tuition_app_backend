@@ -28,6 +28,7 @@ import AdminPublications from './Components/AdminPage/AdminPublications/AdminPub
 import AdminSchedule from './Components/AdminPage/AdminSchedule/AdminSchedule';
 import AdminTeacher from './Components/AdminPage/AdminTeacher/AdminTeacher';
 import AdminUsers from './Components/AdminPage/AdminUsers/AdminUsers';
+import AdminData from './Components/AdminPage/AdminData/AdminData';
 function App() {
   return (
     <Router>
@@ -83,6 +84,7 @@ function App() {
           <Route path="/admin/fee" element={<AdminFee/>} />
           <Route path="/admin/gallery-images" element={<AdminGallery/>} />
           <Route path="/admin/notes" element={<AdminNotes/>} />
+          <Route path="/admin/data" element={<AdminData/>} />
           <Route path="/admin/publication" element={<AdminPublications/>} />
           <Route path="/admin/schedule" element={<AdminSchedule/>} />
           <Route path="/admin/teacher" element={<AdminTeacher/>} />
