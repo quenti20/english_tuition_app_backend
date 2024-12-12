@@ -11,7 +11,9 @@ require('dotenv').config();
 app.use(bodyparser.json());
 
 app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+    credentials: true, // Allow cookies if required
 }));
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
