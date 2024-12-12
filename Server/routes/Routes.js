@@ -12,7 +12,7 @@ const feeController = require('../controllers/Fee')
 const gallery_imagesController = require('../controllers/GalleryImages')
 const scheduleController = require('../controllers/Schedule')
 
-router.post('/newUser',userController.createNewUser)
+router.post('/createUser',userController.createNewUser)
 router.post('/login',userController.userLogin)
 router.put('/updateUser/:id',userController.updateUser)
 router.get('/getAllUsers/',userController.getAllUsers)
