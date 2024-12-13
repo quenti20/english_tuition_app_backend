@@ -29,6 +29,7 @@ import AdminSchedule from './Components/AdminPage/AdminSchedule/AdminSchedule';
 import AdminTeacher from './Components/AdminPage/AdminTeacher/AdminTeacher';
 import AdminUsers from './Components/AdminPage/AdminUsers/AdminUsers';
 import AdminData from './Components/AdminPage/AdminData/AdminData';
+import UserProfile from './Components/UserPage/UserProfile';
 function App() {
   return (
     <Router>
@@ -90,7 +91,9 @@ function App() {
           <Route path="/admin/teacher" element={<AdminTeacher/>} />
           <Route path="/admin/users" element={<AdminUsers/>} />
           
-
+          <Route path="/user/profile" element={<UserProfile/>}/>
+          
+          
         </Routes>
       </div>
     </Router>

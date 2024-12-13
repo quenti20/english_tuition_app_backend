@@ -20,17 +20,14 @@ const AdminUsers = () => {
     if (!user || !user.is_admin || user.attendance !== 0) {
       alert('Unauthorized access');
       window.location.href = '/login';
-    }
-    else {
-        fetchUsers() ;
+    } else {
+      fetchUsers();
     }
   }, []);
 
   useEffect(() => {
     applyFilters();
   }, [classFilter, boardFilter, users]);
-
-  
 
   const fetchUsers = async () => {
     try {
@@ -51,12 +48,18 @@ const AdminUsers = () => {
   };
 
   const handleDeleteUser = async (id) => {
-    try {
-      await axios.delete(`https://english-tuition-app-backend.vercel.app/deleteUser/${id}`);
-      alert('User deleted successfully!');
-      fetchUsers();
-    } catch (error) {
-      console.error('Error deleting user:', error);
+    const userConfirmation = window.confirm(
+      'Are you sure you want to delete this user? This action cannot be undone.'
+    );
+
+    if (userConfirmation) {
+      try {
+        await axios.delete(`https://english-tuition-app-backend.vercel.app/deleteUser/${id}`);
+        alert('User deleted successfully!');
+        fetchUsers();
+      } catch (error) {
+        console.error('Error deleting user:', error);
+      }
     }
   };
 
@@ -103,23 +106,54 @@ const AdminUsers = () => {
         <ul>
           {filteredUsers.map((user) => (
             <li key={user._id} className="border p-2 mb-2">
-              <p><strong>Name:</strong> {user.name}</p>
-              <p><strong>Email:</strong> {user.email}</p>
-              <button
-                className="bg-yellow-500 text-white p-2 mt-2"
-                onClick={() => {
-                  setSelectedUser(user);
-                  setShowUpdateUser(true);
-                }}
-              >
-                Edit User
-              </button>
-              <button
-                className="bg-red-500 text-white p-2 mt-2 ml-2"
-                onClick={() => handleDeleteUser(user._id)}
-              >
-                Delete User
-              </button>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p>
+                    <strong>Name:</strong> {user.name}{' '}
+                    <span
+                      className={
+                        user.active_status
+                          ? 'text-green-600 font-bold'
+                          : 'text-red-600 font-bold'
+                      }
+                    >
+                      {user.active_status ? 'Currently Student' : 'Admission Requested'}
+                    </span>
+                  </p>
+                  <p><strong>Email:</strong> {user.email}</p>
+                  <p><strong>Phone:</strong> {user.phone_number}</p>
+                  <p><strong>Guardian Number:</strong> {user.guardian_number}</p>
+                  <p><strong>Class:</strong> {user.Class}</p>
+                  <p><strong>Board:</strong> {user.board}</p>
+                  <p><strong>DOB:</strong> {user.DOB}</p>
+                  <p><strong>Payment Status:</strong> {user.payment_status ? 'Paid' : 'Unpaid'}</p>
+                  <p><strong>Date of Admission Request:</strong> {new Date(user.date_of_admission_request).toLocaleString()}</p>
+                  <p><strong>Payment Screenshot:</strong></p>
+                  <img
+                    src={user.payment_ss}
+                    alt="payment_screenshot_image"
+                    className="w-32 h-auto border rounded"
+                    onError={(e) => (e.target.src = '', e.target.alt = 'payment_screenshot_image')}
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <button
+                    className="bg-yellow-500 text-white p-2 mt-2"
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setShowUpdateUser(true);
+                    }}
+                  >
+                    Edit User
+                  </button>
+                  <button
+                    className="bg-red-500 text-white p-2 mt-2"
+                    onClick={() => handleDeleteUser(user._id)}
+                  >
+                    Delete User
+                  </button>
+                </div>
+              </div>
             </li>
           ))}
         </ul>
@@ -154,3 +188,4 @@ const AdminUsers = () => {
 };
 
 export default AdminUsers;
+    
