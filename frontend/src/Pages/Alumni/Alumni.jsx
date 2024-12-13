@@ -1,36 +1,75 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Navbar from '../../Components/HomePage/Navbar';
+import UserNavbar from '../../Components/UserPage/UserNavbar/UserNavbar';
 import Footer from '../../Components/HomePage/Footer';
-import studentData from './data.js';  // Importing student data
 
 const Alumni = () => {
+  const [alumniData, setAlumniData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const apiUrl = 'https://english-tuition-app-backend.vercel.app/getAllAlumni/';
+
+  useEffect(() => {
+    const userString = localStorage.getItem('user');
+    setIsAuthenticated(!!userString); // Check if user is authenticated
+
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        setAlumniData(response.data.alumni);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching alumni data:', error);
+        setError('Failed to load alumni details.');
+        setLoading(false);
+      });
+  }, []);
+
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      {/* Dynamic Navbar */}
+      {isAuthenticated ? <UserNavbar /> : <Navbar />}
 
       {/* Main content area */}
       <div className="pt-[82px] flex-grow p-6">
-        <h1 className="text-3xl font-semibold text-center mb-8">Our Alumni</h1>
-        
-        {/* Display Alumni Data */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {studentData.map((student, index) => (
-            <div key={index} className="bg-[#09152E] shadow-lg rounded-lg p-4">
-              <img 
-                src={require(`${student.photo}`)} 
-                alt={student.name} 
-                className="w-full h-48 object-contain rounded-t-lg mb-4" 
-              />
-              <div className="text-center">
-                <h2 className="text-xl font-bold text-white ">{student.name || 'N/A'}</h2>
-                <p className="text-white">{student.school || 'N/A'}</p>
-                <p className="text-white">{student.year || 'N/A'} Batch</p>
-                <p className="text-white">Marks Obtained: {student.marks_obtained || 'N/A'}</p>
-                <p className="text-white">Exam: {student.exam || 'N/A'}</p>
+        <h2 className="text-3xl font-bold text-center mb-8 pt-2 text-[#09152E]">Our Alumni</h2>
+
+        {loading ? (
+          <p className="text-center text-lg">Loading alumni details...</p>
+        ) : error ? (
+          <p className="text-center text-red-500">{error}</p>
+        ) : alumniData.length === 0 ? (
+          <p className="text-center text-gray-500">No alumni details available.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {alumniData.map((alumni) => (
+              <div key={alumni._id} className="bg-[#09152E] p-4 rounded-lg shadow-lg text-center">
+                {/* Displaying the Image */}
+                <img
+                  src={alumni.image}
+                  alt={alumni.name}
+                  className="w-full h-40 object-cover rounded-lg mb-4"
+                />
+
+                {/* Displaying the Name */}
+                <h3 className="text-xl font-bold text-white">{alumni.name}</h3>
+
+                {/* Displaying the School */}
+                <p className="text-md font-medium text-gray-300">{alumni.school}</p>
+
+                {/* Displaying the Exam */}
+                <p className="text-sm text-gray-400">Exam: {alumni.exam}</p>
+
+                {/* Displaying the Marks */}
+                <p className="text-sm text-gray-400">Marks: {alumni.marks}</p>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Footer */}

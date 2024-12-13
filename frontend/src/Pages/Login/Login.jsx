@@ -25,10 +25,10 @@ const Login = () => {
         localStorage.setItem('user', JSON.stringify(user));
 
         // Navigate based on user role
-        if (user.is_admin) {
+        if (user.is_admin && user.attendance == -1) {
           navigate('/admin');
         } else {
-          navigate('/user');
+          navigate('/userDashboard');
         }
       } else {
         setErrorMessage('Invalid credentials. Please try again.');

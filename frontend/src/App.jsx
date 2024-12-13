@@ -29,7 +29,11 @@ import AdminSchedule from './Components/AdminPage/AdminSchedule/AdminSchedule';
 import AdminTeacher from './Components/AdminPage/AdminTeacher/AdminTeacher';
 import AdminUsers from './Components/AdminPage/AdminUsers/AdminUsers';
 import AdminData from './Components/AdminPage/AdminData/AdminData';
-import UserProfile from './Components/UserPage/UserProfile';
+import UserProfile from './Components/UserPage/UserProfile/UserProfile';
+import UserNavbar from './Components/UserPage/UserNavbar/UserNavbar';
+import UserSchedule from './Components/UserPage/UserSchedule/UserSchedule';
+import UserNotes from './Components/UserPage/UserNotes/UserNotes';
+import ChangePassword from './Pages/ChangePassword/ChangePassword';
 function App() {
   return (
     <Router>
@@ -91,8 +95,40 @@ function App() {
           <Route path="/admin/teacher" element={<AdminTeacher/>} />
           <Route path="/admin/users" element={<AdminUsers/>} />
           
+
+          <Route 
+            path="/userDashboard" 
+            element={
+              <>
+                
+                <div id="header">
+                  <UserNavbar />
+                </div>
+                <div id="banner">
+                  <Banner />
+                </div>
+                <div id="experts">
+                  <Experts />
+                </div>
+                <div id="gallery">
+                  <Gallery />
+                </div>
+                <div id="newsletter">
+                  <NewsLetter />
+                </div>
+                <Footer />
+              </>
+            } 
+          />  
+             
+          <Route path="/user/navbar" element={<UserNavbar/>}/>
           <Route path="/user/profile" element={<UserProfile/>}/>
+          <Route path="/user/schedule" element={<UserSchedule/>}/>
+          <Route path="/user/notes" element={<UserNotes/>}/>
+          <Route path="/user/fee-structure" element={<Fee_structure/>}/>
+          <Route path="/user/change-password" element={<ChangePassword/>}/>
           
+
           
         </Routes>
       </div>
