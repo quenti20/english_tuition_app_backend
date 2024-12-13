@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Gallery = () => {
   // State to manage the current active image
   const [currentIndex, setCurrentIndex] = useState(0);
   // State to track if the user has manually interacted with the slider
   const [isManualOverride, setIsManualOverride] = useState(false);
+  // State to store gallery images fetched from the API
+  const [images, setImages] = useState([]);
 
-  // Dynamically fetching images from the relative path
-  const images = Array.from({ length: 13 }, (_, index) => {
-    return require(`../../Images/Gallery_images/img_${index + 1}.jpg`);
-  });
+  // Fetch gallery images from the API
+  useEffect(() => {
+    const fetchGalleryImages = async () => {
+      try {
+        const response = await axios.get('https://english-tuition-app-backend.vercel.app/getAllGalleryImages');
+        setImages(response.data.galleryImages || []);
+      } catch (error) {
+        console.error('Error fetching gallery images:', error);
+      }
+    };
+
+    fetchGalleryImages();
+  }, []);
 
   // Function to handle the next image
   const handleNext = () => {
@@ -25,14 +37,14 @@ const Gallery = () => {
 
   // Effect to automatically change the image every 2 seconds
   useEffect(() => {
-    if (!isManualOverride) {
+    if (!isManualOverride && images.length > 0) {
       const interval = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
       }, 2000);
 
       return () => clearInterval(interval); // Clean up the interval
     }
-  }, [currentIndex, isManualOverride]);
+  }, [currentIndex, isManualOverride, images.length]);
 
   return (
     <div id="gallery" className="relative w-full h-[300px] md:h-[500px] bg-[#09152E] bg-no-repeat bg-cover" data-carousel="slide">
@@ -42,16 +54,14 @@ const Gallery = () => {
 
       {/* Carousel wrapper */}
       <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
-        {images.map((image, index) => (
+        {images.length > 0 && images.map((image, index) => (
           <div
-            key={index}
-            className={`absolute duration-700 ease-in-out top-0 left-0 w-full h-full ${
-              currentIndex === index ? "block" : "hidden"
-            }`}
+            key={image._id}
+            className={`absolute duration-700 ease-in-out top-0 left-0 w-full h-full ${currentIndex === index ? "block" : "hidden"}`}
             data-carousel-item={currentIndex === index ? "active" : ""}
           >
             <img
-              src={image}
+              src={image.image}
               className="block w-full h-full object-contain"
               alt={`Gallery Image ${index + 1}`}
             />

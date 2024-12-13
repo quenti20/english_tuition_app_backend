@@ -1,45 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.752c1508.css",
-    "main.js": "/static/js/main.f6ddba2c.js",
-    "static/media/magazine_publication.pdf": "/static/media/magazine_publication.62626de6199c24c98e10.pdf",
-    "static/media/anwesha.jpg": "/static/media/anwesha.9ddb2e335f42ada2b9c5.jpg",
-    "static/media/publication_book.png": "/static/media/publication_book.c5718828d58335054193.png",
-    "static/media/img_12.jpg": "/static/media/img_12.0c1b1d24bfe60c42d51e.jpg",
-    "static/media/img_13.jpg": "/static/media/img_13.a551bd62a143a5fe8c59.jpg",
-    "static/media/Anwesha.jpg": "/static/media/Anwesha.570ffe70c5c45bfaadfe.jpg",
-    "static/media/img_7.jpg": "/static/media/img_7.eb4904ccdc5b94348fd4.jpg",
-    "static/media/Monalisha.jpg": "/static/media/Monalisha.9f03bc22fecae17f9f1e.jpg",
-    "static/media/Rajarshi.jpg": "/static/media/Rajarshi.bcbb7920348cebec9d23.jpg",
-    "static/media/Mehuli.jpg": "/static/media/Mehuli.567905483b01249b3755.jpg",
-    "static/media/img_10.jpg": "/static/media/img_10.989b2681a7f9bbdb14fb.jpg",
+    "main.css": "/static/css/main.754d071b.css",
+    "main.js": "/static/js/main.583ed518.js",
     "static/media/Revised_Fees_Structure_2024.pdf": "/static/media/Revised_Fees_Structure_2024.ecb95ee02bf59b4195b5.pdf",
-    "static/media/Soumyadeep.jpg": "/static/media/Soumyadeep.3b00512c051bcfccf382.jpg",
-    "static/media/img_6.jpg": "/static/media/img_6.3ddc8440ef318c1579b1.jpg",
-    "static/media/Rittika.jpg": "/static/media/Rittika.015236a79110b062f83f.jpg",
-    "static/media/img_3.jpg": "/static/media/img_3.181e0575d0ecbfdd250e.jpg",
-    "static/media/img_11.jpg": "/static/media/img_11.96d441c99875a70f63ec.jpg",
     "static/media/logo.png": "/static/media/logo.e95bc9f13b0e34ea84f0.png",
-    "static/media/Debrima.jpg": "/static/media/Debrima.4e6f7e1871af5bfc21a4.jpg",
-    "static/media/img_2.jpg": "/static/media/img_2.e127463856c52cf689d1.jpg",
-    "static/media/img_9.jpg": "/static/media/img_9.af2e56eee5f7eb86a718.jpg",
-    "static/media/img_8.jpg": "/static/media/img_8.a3bbf4a88b89ee4e6d3c.jpg",
-    "static/media/img_4.jpg": "/static/media/img_4.f38598289edd02951ad5.jpg",
-    "static/media/img_1.jpg": "/static/media/img_1.c6cc4b41acd306dc45c5.jpg",
-    "static/media/budding_bards_pub.png": "/static/media/budding_bards_pub.1502870078e3b8fee173.png",
-    "static/media/payment_QR.jpg": "/static/media/payment_QR.3732d2ebcbace2b0ffdc.jpg",
-    "static/media/Dipanwita.jpg": "/static/media/Dipanwita.a38e0c062d8548fcedb8.jpg",
-    "static/media/img_5.jpg": "/static/media/img_5.900b69ad7934420d3bf4.jpg",
-    "static/media/anushka.jpg": "/static/media/anushka.79643b7aeb2d12589084.jpg",
-    "static/media/Moubani.jpg": "/static/media/Moubani.da40dc712f0a20c39947.jpg",
-    "static/media/Srinjoy.jpg": "/static/media/Srinjoy.e872cb45721dd373d89b.jpg",
-    "static/media/arghyadeep.jpg": "/static/media/arghyadeep.346b992935979941e43c.jpg",
+    "static/media/pub_1.jpg": "/static/media/pub_1.f59197e36e21a9d56cc8.jpg",
+    "static/media/profile_icon.webp": "/static/media/profile_icon.e308526e19929abce386.webp",
     "index.html": "/index.html",
-    "main.752c1508.css.map": "/static/css/main.752c1508.css.map",
-    "main.f6ddba2c.js.map": "/static/js/main.f6ddba2c.js.map"
+    "main.754d071b.css.map": "/static/css/main.754d071b.css.map",
+    "main.583ed518.js.map": "/static/js/main.583ed518.js.map"
   },
   "entrypoints": [
-    "static/css/main.752c1508.css",
-    "static/js/main.f6ddba2c.js"
+    "static/css/main.754d071b.css",
+    "static/js/main.583ed518.js"
   ]
 }

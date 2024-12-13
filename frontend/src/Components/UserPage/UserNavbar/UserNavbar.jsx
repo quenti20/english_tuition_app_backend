@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +11,16 @@ const UserNavbar = () => {
   const [showResourcesDropdown, setShowResourcesDropdown] = useState(false);
   const [showDownloadsDropdown, setShowDownloadsDropdown] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [userName, setUserName] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      const user = JSON.parse(userString);
+      setUserName(user.name || 'User'); // Fallback to 'User' if name is unavailable
+    }
+  }, []);
 
   const handleNav = () => {
     setNav(!nav);
@@ -25,9 +34,14 @@ const UserNavbar = () => {
     setShowProfileDropdown(false);
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
+
   return (
-    <div className="bg-[#09152E] fixed top-0 left-0 w-full z-50 p-4 rounded">
-      <div className="max-w-[1240px] bg-[#09152E] flex justify-between items-center mx-auto text-white">
+    <div className="bg-[#09152E] fixed top-0 left-0 w-full z-50 p-4">
+      <div className="max-w-[1240px] flex justify-between items-center mx-auto text-white">
         {/* Logo and Title */}
         <div className="flex items-center">
           <img src={Logo} alt="Logo" className="w-12 h-12 mr-2" />
@@ -124,11 +138,14 @@ const UserNavbar = () => {
             onMouseEnter={() => setShowProfileDropdown(true)}
             onMouseLeave={() => setShowProfileDropdown(false)}
           >
-            <img
-              src={ProfileIcon}
-              alt="Profile"
-              className="w-8 h-8 rounded-full"
-            />
+            <div className="flex items-center">
+              <img
+                src={ProfileIcon}
+                alt="Profile"
+                className="w-8 h-8 rounded-full mr-2"
+              />
+              <span className="text-sm">{`Welcome, ${userName}`}</span>
+            </div>
             {showProfileDropdown && (
               <ul className="absolute top-full right-0 bg-gray-800 text-white rounded-lg w-40 shadow-lg">
                 <li
@@ -145,7 +162,7 @@ const UserNavbar = () => {
                 </li>
                 <li
                   className="p-4 hover:bg-gray-700"
-                  onClick={() => navigate('/logout')}
+                  onClick={handleLogout}
                 >
                   Logout
                 </li>
@@ -160,126 +177,149 @@ const UserNavbar = () => {
         </div>
 
         {/* Mobile Navigation Menu */}
-        <ul
-          className={`${
-            nav ? 'fixed' : 'hidden'
-          } md:hidden left-0 top-0 w-[60%] h-full border-r border-gray-900 bg-[#000300] ease-in-out duration-500`}
-        >
-          {/* Mobile Navbar Header */}
-          <div className="flex items-center p-4">
-            <img src={Logo} alt="Logo" className="w-12 h-12 mr-2" />
-            <h1 className="text-3xl font-bold text-[#eff1f0]">The Linguist</h1>
-          </div>
+        {nav && (
+          <ul className="fixed left-0 top-0 w-[60%] h-full border-r border-gray-900 bg-[#000300] ease-in-out duration-500">
+            <div className="flex items-center p-4">
+              <img src={Logo} alt="Logo" className="w-12 h-12 mr-2" />
+              <h1 className="text-3xl font-bold text-[#eff1f0]">The Linguist</h1>
+            </div>
 
-          <li
-            className="p-4 border-b border-gray-600"
-            onClick={() => navigate('/userDashboard')}
-          >
-            Home
-          </li>
+            <li
+              className="p-4 border-b border-gray-600"
+              onClick={() => {
+                navigate('/userDashboard');
+                setNav(false);
+              }}
+            >
+              Home
+            </li>
 
-          {/* Mobile Admission Dropdown */}
-          <li
-            className="p-4 border-b border-gray-600"
-            onClick={() => setShowAdmissionDropdown(!showAdmissionDropdown)}
-          >
-            Admission
-            {showAdmissionDropdown && (
-              <ul className="pl-4">
-                <li
-                  className="p-2"
-                  onClick={() => navigate('/user/schedule')}
-                >
-                  Class Schedule
-                </li>
-                <li
-                  className="p-2"
-                  onClick={() => navigate('/user/fee-structure')}
-                >
-                  Fee Structure
-                </li>
-              </ul>
-            )}
-          </li>
+            <li
+              className="p-4 border-b border-gray-600"
+              onClick={() => setShowAdmissionDropdown(!showAdmissionDropdown)}
+            >
+              Admission
+              {showAdmissionDropdown && (
+                <ul className="pl-4">
+                  <li
+                    className="p-2"
+                    onClick={() => {
+                      navigate('/user/schedule');
+                      setNav(false);
+                    }}
+                  >
+                    Class Schedule
+                  </li>
+                  <li
+                    className="p-2"
+                    onClick={() => {
+                      navigate('/fee-structure');
+                      setNav(false);
+                    }}
+                  >
+                    Fee Structure
+                  </li>
+                </ul>
+              )}
+            </li>
 
-          {/* Mobile Resources Dropdown */}
-          <li
-            className="p-4 border-b border-gray-600"
-            onClick={() => setShowResourcesDropdown(!showResourcesDropdown)}
-          >
-            Resources
-            {showResourcesDropdown && (
-              <ul className="pl-4">
-                <li
-                  className="p-2"
-                  onClick={() => navigate('/faculty')}
-                >
-                  Faculty
-                </li>
-                <li
-                  className="p-2"
-                  onClick={() => navigate('/publications')}
-                >
-                  Publications
-                </li>
-                <li
-                  className="p-2"
-                  onClick={() => navigate('/alumni')}
-                >
-                  Prev Year Alumni
-                </li>
-              </ul>
-            )}
-          </li>
+            <li
+              className="p-4 border-b border-gray-600"
+              onClick={() => setShowResourcesDropdown(!showResourcesDropdown)}
+            >
+              Resources
+              {showResourcesDropdown && (
+                <ul className="pl-4">
+                  <li
+                    className="p-2"
+                    onClick={() => {
+                      navigate('/faculty');
+                      setNav(false);
+                    }}
+                  >
+                    Faculty
+                  </li>
+                  <li
+                    className="p-2"
+                    onClick={() => {
+                      navigate('/publications');
+                      setNav(false);
+                    }}
+                  >
+                    Publications
+                  </li>
+                  <li
+                    className="p-2"
+                    onClick={() => {
+                      navigate('/alumni');
+                      setNav(false);
+                    }}
+                  >
+                    Prev Year Alumni
+                  </li>
+                </ul>
+              )}
+            </li>
 
-          {/* Mobile Downloads Dropdown */}
-          <li
-            className="p-4 border-b border-gray-600"
-            onClick={() => setShowDownloadsDropdown(!showDownloadsDropdown)}
-          >
-            Downloads
-            {showDownloadsDropdown && (
-              <ul className="pl-4">
-                <li
-                  className="p-2"
-                  onClick={() => navigate('/user/notes')}
-                >
-                  Download Notes
-                </li>
-              </ul>
-            )}
-          </li>
+            <li
+              className="p-4 border-b border-gray-600"
+              onClick={() => setShowDownloadsDropdown(!showDownloadsDropdown)}
+            >
+              Downloads
+              {showDownloadsDropdown && (
+                <ul className="pl-4">
+                  <li
+                    className="p-2"
+                    onClick={() => {
+                      navigate('/user/notes');
+                      setNav(false);
+                    }}
+                  >
+                    Download Notes
+                  </li>
+                </ul>
+              )}
+            </li>
 
-          {/* Mobile Profile Dropdown */}
-          <li
-            className="p-4 border-b border-gray-600"
-            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-          >
-            Profile
-            {showProfileDropdown && (
-              <ul className="pl-4">
-                <li
-                  className="p-2"
-                  onClick={() => navigate('/user/profile')}
-                >
-                  Profile Section
-                </li>
-                <li
-                  className="p-2"
-                  onClick={() => navigate('/user/change-password')}
-                >
-                  Change Password
-                </li>
-                <li
-                  className="p-2"
-                  onClick={() => navigate('/logout')}
-                >
-                  Logout
-                </li>
-              </ul>
-            )}
-          </li>
-        </ul>
+            <li
+              className="p-4 border-b border-gray-600"
+              onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+            >
+              Profile
+              {showProfileDropdown && (
+                <ul className="pl-4">
+                  <li
+                    className="p-2"
+                    onClick={() => {
+                      navigate('/user/profile');
+                      setNav(false);
+                    }}
+                  >
+                    Profile Section
+                  </li>
+                  <li
+                    className="p-2"
+                    onClick={() => {
+                      navigate('/user/change-password');
+                      setNav(false);
+                    }}
+                  >
+                    Change Password
+                  </li>
+                  <li
+                    className="p-2"
+                    onClick={() => {
+                      handleLogout();
+                      setNav(false);
+                    }}
+                  >
+                    Logout
+                  </li>
+                </ul>
+              )}
+            </li>
+          </ul>
+        )}
       </div>
     </div>
   );

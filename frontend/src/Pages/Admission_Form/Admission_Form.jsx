@@ -1,184 +1,248 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../Components/HomePage/Navbar';
 import Footer from '../../Components/HomePage/Footer';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import QrCode from './payment_QR.jpg';
 
 const Admission_Form = () => {
   const navigate = useNavigate();
 
   // State to handle form data
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    guardianName: '',
-    dob: '',
-    className: '',
-    board: '',
-    studentContact: '',
+    name: '',
     email: '',
-    parentContact: '',
-    addressLine1: '',
-    addressLine2: '',
+    phone_number: '',
+    Class: '',
+    board: '',
+    guardian_number: '',
+    DOB: '',
+    payment_ss: null, // To handle file upload
   });
 
-  // Handler for form input changes
+  const [qrData, setQrData] = useState({ payment_qr: '', upi_id: '' }); // For QR code and UPI ID
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Fetch QR code and UPI ID on component mount
+  useEffect(() => {
+    const fetchQrData = async () => {
+      try {
+        const response = await axios.get('https://english-tuition-app-backend.vercel.app/getAllData');
+        const { data } = response.data;
+        setQrData({
+          payment_qr: data[0]?.payment_qr || '',
+          upi_id: data[0]?.upi_id || '',
+        });
+      } catch (error) {
+        console.error('Error fetching QR data:', error);
+      }
+    };
+
+    fetchQrData();
+  }, []);
+
+  // Validate email format
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  // Validate phone number format
+  const validatePhoneNumber = (number) => /^\d{10}$/.test(number);
+
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Form submission handler
-  const handleSubmit = (e) => {
+  // Handle file upload
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, payment_ss: e.target.files[0] });
+  };
+
+  // Validate form fields
+  const validateForm = () => {
+    const errors = {};
+    if (!validateEmail(formData.email)) errors.email = 'Invalid email format';
+    if (!validatePhoneNumber(formData.phone_number)) errors.phone_number = 'Phone number must be 10 digits';
+    if (!validatePhoneNumber(formData.guardian_number)) errors.guardian_number = 'Guardian number must be 10 digits';
+    if (!formData.payment_ss) errors.payment_ss = 'Payment screenshot is required';
+    return errors;
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData); // Here you can add the logic to handle form submission
+    const validationErrors = validateForm();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      setIsSubmitting(true);
+
+      // Prepare form data
+      const postData = new FormData();
+      postData.append('name', formData.name);
+      postData.append('email', formData.email);
+      postData.append('phone_number', formData.phone_number);
+      postData.append('Class', formData.Class);
+      postData.append('board', formData.board);
+      postData.append('guardian_number', formData.guardian_number);
+      postData.append('DOB', formData.DOB.split('-').reverse().join('')); // Convert to ddmmyyyy
+      postData.append('payment_ss', formData.payment_ss);
+
+      try {
+        const response = await axios.post('https://english-tuition-app-backend.vercel.app/createUser', postData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        alert('User created successfully');
+        navigate('/login'); // Redirect after success
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('Error submitting form');
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Navbar />
 
-      {/* Main content area */}
+      {/* Main content */}
       <div className="pt-[82px] flex-grow p-6">
         <h1 className="text-3xl font-semibold text-center text-gray-800 mb-8">Admission Form and Payment</h1>
-        
-        {/* Admission Form */}
+
         <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-[#09152E] text-white shadow-lg rounded-lg p-6 border border-gray-200">
-          
-          <h2 className="text-2xl font-semibold mb-6 ">Student Information</h2>
+          <h2 className="text-2xl font-semibold mb-6">Student Information</h2>
 
-          {/* Student First Name */}
+          {/* Name */}
           <div className="mb-4">
-            <label className="block font-medium  mb-1">Student First Name</label>
-            <input 
-              type="text" 
-              name="firstName" 
-              placeholder="Enter student's first name"
-              value={formData.firstName} 
-              onChange={handleChange} 
-              required 
-              className="w-full border border-gray-300 rounded px-3 py-2 placeholder-gray-400 focus:outline-none focus:border-gray-500"
+            <label className="block font-medium mb-1">Student Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded px-3 py-2 text-black"
             />
           </div>
 
-          {/* Student Last Name */}
+          {/* Email */}
           <div className="mb-4">
-            <label className="block font-medium  mb-1">Student Last Name</label>
-            <input 
-              type="text" 
-              name="lastName" 
-              placeholder="Enter student's last name"
-              value={formData.lastName} 
-              onChange={handleChange} 
-              required 
-              className="w-full border border-gray-300 rounded px-3 py-2 placeholder-gray-400 focus:outline-none focus:border-gray-500"
+            <label className="block font-medium mb-1">Email ID</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className={`w-full border rounded px-3 py-2 text-black ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
             />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
           </div>
 
-          {/* Guardian Name */}
+          {/* Phone Number */}
           <div className="mb-4">
-            <label className="block font-medium  mb-1">Guardian Name</label>
-            <input 
-              type="text" 
-              name="guardianName" 
-              placeholder="If under 18, else enter 'NA'"
-              value={formData.guardianName} 
-              onChange={handleChange} 
-              className="w-full border border-gray-300 rounded px-3 py-2 placeholder-gray-400 focus:outline-none focus:border-gray-500"
+            <label className="block font-medium mb-1">Student Phone Number</label>
+            <input
+              type="tel"
+              name="phone_number"
+              value={formData.phone_number}
+              onChange={handleChange}
+              required
+              className={`w-full border rounded px-3 py-2 text-black ${errors.phone_number ? 'border-red-500' : 'border-gray-300'}`}
             />
+            {errors.phone_number && <p className="text-red-500 text-sm mt-1">{errors.phone_number}</p>}
           </div>
 
-          {/* Date of Birth */}
+          {/* Guardian Number */}
           <div className="mb-4">
-            <label className="block font-medium  mb-1">Date of Birth</label>
-            <input 
-              type="date" 
-              name="dob" 
-              value={formData.dob} 
-              onChange={handleChange} 
-              required 
-              className="w-full border border-gray-300 rounded px-3 py-2 text-gray-600 focus:outline-none focus:border-gray-500"
+            <label className="block font-medium mb-1">Guardian Phone Number</label>
+            <input
+              type="tel"
+              name="guardian_number"
+              value={formData.guardian_number}
+              onChange={handleChange}
+              required
+              className={`w-full border rounded px-3 py-2 text-black ${errors.guardian_number ? 'border-red-500' : 'border-gray-300'}`}
+            />
+            {errors.guardian_number && <p className="text-red-500 text-sm mt-1">{errors.guardian_number}</p>}
+          </div>
+
+          {/* DOB */}
+          <div className="mb-4">
+            <label className="block font-medium mb-1">Date of Birth</label>
+            <input
+              type="date"
+              name="DOB"
+              value={formData.DOB}
+              onChange={handleChange}
+              required
+              className="w-full border rounded px-3 py-2 text-black"
             />
           </div>
 
           {/* Class */}
           <div className="mb-4">
-            <label className="block font-medium text-gray-600 mb-1">Class</label>
-            <input 
-              type="text" 
-              name="className" 
-              placeholder="Enter the class (e.g., 10th, 12th)"
-              value={formData.className} 
-              onChange={handleChange} 
-              required 
-              className="w-full border border-gray-300 rounded px-3 py-2 placeholder-gray-400 focus:outline-none focus:border-gray-500"
-            />
+            <label className="block font-medium mb-1">Class</label>
+            <select
+              name="Class"
+              value={formData.Class}
+              onChange={handleChange}
+              required
+              className="w-full border rounded px-3 py-2 text-black"
+            >
+              <option value="">Select Class</option>
+              {[5, 6, 7, 8, 9, 10, 11, 12].map((classOption) => (
+                <option key={classOption} value={classOption}>{classOption}</option>
+              ))}
+            </select>
           </div>
 
           {/* Board */}
           <div className="mb-4">
-            <label className="block font-medium  mb-1">Board</label>
-            <input 
-              type="text" 
-              name="board" 
-              placeholder="Enter the board (e.g., CBSE, ICSE)"
-              value={formData.board} 
-              onChange={handleChange} 
-              required 
-              className="w-full border border-gray-300 rounded px-3 py-2 placeholder-gray-400 focus:outline-none focus:border-gray-500"
-            />
-          </div>
-
-          {/* Contact Numbers */}
-          <div className="mb-4">
-            <label className="block font-medium  mb-1">Student Contact Number</label>
-            <input 
-              type="tel" 
-              name="studentContact" 
-              placeholder="Enter student's phone number"
-              value={formData.studentContact} 
-              onChange={handleChange} 
-              required 
-              className="w-full border border-gray-300 rounded px-3 py-2 placeholder-gray-400 focus:outline-none focus:border-gray-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block font-medium  mb-1">Email ID</label>
-            <input 
-              type="email" 
-              name="email" 
-              placeholder="Enter student's email"
-              value={formData.email} 
-              onChange={handleChange} 
-              required 
-              className="w-full border border-gray-300 rounded px-3 py-2 placeholder-gray-400 focus:outline-none focus:border-gray-500"
-            />
-          </div>
-
-          {/* Payment Section */}
-          <h2 className="text-2xl font-semibold mb-4 mt-8 ">Payment Information</h2>
-          <p className=" mb-4">Scan the QR Code below to make the payment.</p>
-          <img 
-            src={QrCode} 
-            alt="QR Code" 
-            className="w-48 mx-auto mb-4"
-          />
-          <button 
-            type="button" 
-            className="text-blue-300 hover:underline" 
-            onClick={() => navigate('/fee-structure')}
-          >
-            View Fees Structure
-          </button>
-
-          {/* Submit Button */}
-          <div className="mt-8 text-center">
-            <button 
-              type="submit" 
-              className="px-6 py-2 bg-[#21396e] text-white rounded-lg hover:bg-gray-700"
+            <label className="block font-medium mb-1">Board</label>
+            <select
+              name="board"
+              value={formData.board}
+              onChange={handleChange}
+              required
+              className="w-full border rounded px-3 py-2 text-black"
             >
-              Submit
+              <option value="">Select Board</option>
+              {['WBSE', 'CBSE', 'CISCE'].map((boardOption) => (
+                <option key={boardOption} value={boardOption}>{boardOption}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* QR Code and UPI ID */}
+          <h2 className="text-2xl font-semibold mb-4 mt-8">Payment Information</h2>
+          <p className="mb-4">Scan the QR Code below to make the payment:</p>
+          {qrData.payment_qr && <img src={qrData.payment_qr} alt="Payment QR" className="w-48 mx-auto mb-4" />}
+          {qrData.upi_id && <p className="text-center text-lg mb-4">{qrData.upi_id}</p>}
+
+          {/* Payment Screenshot */}
+          <div className="mb-4">
+            <label className="block font-medium mb-1">Upload Payment Screenshot</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              required
+              className={`w-full ${errors.payment_ss ? 'border-red-500' : 'border-gray-300'}`}
+            />
+            {errors.payment_ss && <p className="text-red-500 text-sm mt-1">{errors.payment_ss}</p>}
+          </div>
+
+          {/* Submit */}
+          <div className="mt-8 text-center">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-6 py-2 bg-[#21396e] text-white rounded-lg hover:bg-gray-700 disabled:bg-gray-400"
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit'}
             </button>
           </div>
         </form>
