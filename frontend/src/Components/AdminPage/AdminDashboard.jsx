@@ -9,7 +9,7 @@ const AdminDashboard = () => {
     // Retrieve and validate user data from localStorage
     const userData = JSON.parse(localStorage.getItem('user'));
 
-    if (userData && userData.is_admin === true && userData.attendance === 0) {
+    if (userData && userData.is_admin === true && userData.attendance === -1) {
       setIsAuthorized(true);
     } else {
       setIsAuthorized(false);

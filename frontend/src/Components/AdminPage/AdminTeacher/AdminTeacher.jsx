@@ -13,7 +13,7 @@ const AdminTeacher = () => {
   // Check user authentication and permissions
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
-    if (!user || !user.is_admin || user.attendance !== 0) {
+    if (!user || !user.is_admin || user.attendance !== -1) {
       alert('Unauthorized access');
       window.location.href = '/login';
     }
