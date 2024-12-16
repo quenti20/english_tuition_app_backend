@@ -79,7 +79,7 @@ const AdminAlumni = () => {
     if (window.confirm('Are you sure you want to delete this alumni?')) {
       try {
         setLoading(true);
-        await axios.delete(`${apiUrl}/deleteAlumni?id=${id}`);
+        await axios.delete(`${apiUrl}/deleteAlumni/${id}`);
         fetchAlumni();
         setLoading(false);
       } catch (err) {
