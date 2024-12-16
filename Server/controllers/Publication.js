@@ -161,10 +161,10 @@ exports.deletePublication = async (req, res) => {
             return res.status(404).json({ message: 'Publication not found' });
         }
 
-        // Delete associated image file
-        if (publication.image) {
-            fs.unlinkSync(publication.image);
-        }
+        // // Delete associated image file
+        // if (publication.image) {
+        //     fs.unlinkSync(publication.image);
+        // }
 
         await publication.deleteOne();
         res.status(200).json({ message: 'Publication deleted successfully' });

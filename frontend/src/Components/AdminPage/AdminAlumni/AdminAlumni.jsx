@@ -65,7 +65,7 @@ const AdminAlumni = () => {
 
     try {
       setLoading(true);
-      await axios.put(`${apiUrl}/updateAlumni?id=${updateAlumni.id}`, formData);
+      await axios.put(`${apiUrl}/updateAlumni/${updateAlumni.id}`, formData);
       fetchAlumni();
       setUpdateAlumni({ id: '', name: '', school: '', exam: '', marks: '', image: null });
       setLoading(false);
