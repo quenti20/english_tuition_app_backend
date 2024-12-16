@@ -183,6 +183,16 @@ const CreateUser = ({ onClose, onUserCreated }) => {
             onChange={(e) => setUserData({ ...userData, payment_status: e.target.checked })}
           />
         </div>
+            {/*Active Status*/ }
+        <div className="flex items-center gap-2">
+          <label className="block font-medium">Active Status:</label>
+          <input
+            type="checkbox"
+            name="active_status"
+            checked={userData.active_status}
+            onChange={(e) => setUserData({ ...userData, active_status: e.target.checked })}
+          />
+        </div>
 
         {/* Admin Access */}
         <div className="flex items-center gap-2">

@@ -176,15 +176,21 @@ const AdminSchedule = () => {
               required
             />
             <label className='font-bold'>board</label>
-            <input
-              type="text"
-              name="board"
-              placeholder="Board"
-              className="border p-2 mb-4 w-full"
+            <select
+              name='board' 
+              className='border p-2 mb-4 w-full'
               value={formData.board}
               onChange={handleInputChange}
-              required
-            />
+              required            
+            >
+            <option value="" disabled>
+              Select a Board
+            </option>
+            <option value="WBSE">WBSE</option>
+            <option value="CBSE">CBSE</option>
+            <option value="CISCE">CISCE</option>
+            <option value="All">All</option>
+            </select>
             <div className="flex justify-between">
               <button type="submit" className="bg-blue-500 text-white p-2">
                 Save
