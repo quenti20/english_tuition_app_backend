@@ -53,18 +53,43 @@ const UserNotes = () => {
       });
   }, []);
 
+  const downloadFile = async (fileUrl, fileName) => {
+    try {
+      const response = await axios.get(fileUrl, {
+        responseType: 'blob', // Fetch the file as a Blob
+      });
+
+      // Create a blob link to trigger download
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+
+      // Create an anchor element to trigger download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${fileName.replace(/\s+/g, '_')}.pdf`; // Add .pdf extension
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    } catch (error) {
+      console.error('Failed to download the file:', error);
+      alert('Failed to download the file. Please try again.');
+    }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen  text-white">
+    <div className="flex flex-col min-h-screen text-white">
       <UserNavbar />
       <div className="pt-[100px] flex-grow p-6">
         <h1 className="text-3xl font-semibold text-center mb-8 text-black">
           My Notes
         </h1>
         <p className="text-center text-red-400 mb-6 text-sm">
-          Please attach a <span className="font-bold">.pdf extension</span>{' '}
-          while downloading the file along with its name to view the file. In
-          case the file is downloaded already, add the .pdf extension to view
-          it. For example: If the file name is <span className="font-bold">"notes_1"</span>, rename it to <span className="font-bold">"notes_1.pdf"</span>.
+          The files will always be downloaded with a <span className="font-bold">.pdf</span>{' '}
+          extension. For example, if the note name is <span className="font-bold">"notes_1"</span>,
+          it will be saved as <span className="font-bold">"notes_1.pdf"</span>.
         </p>
         {error && (
           <p className="text-center text-red-500 mb-4 text-lg">{error}</p>
@@ -72,7 +97,9 @@ const UserNotes = () => {
         {loading ? (
           <p className="text-center text-lg">Loading notes...</p>
         ) : notes.length === 0 ? (
-          <p className="text-center text-gray-300">No notes available for your class and board.</p>
+          <p className="text-center text-gray-300">
+            No notes available for your class and board.
+          </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {notes.map((note) => (
@@ -86,19 +113,19 @@ const UserNotes = () => {
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-4">
-                  <h2 className="text-lg font-bold text-[#FFD700]">{note.notes_name}</h2>
+                  <h2 className="text-lg font-bold text-[#FFD700]">
+                    {note.notes_name}
+                  </h2>
                   <p className="text-gray-300 text-sm mb-4">
                     <span className="font-medium">Class:</span> {note.Class} |{' '}
                     <span className="font-medium">Board:</span> {note.board}
                   </p>
-                  <a
-                    href={note.pdf_file}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={() => downloadFile(note.pdf_file, note.notes_name)}
                     className="block w-full text-center bg-[#FFD700] text-[#09152E] font-medium py-2 rounded hover:bg-[#FFC107] transition"
                   >
                     Download Notes
-                  </a>
+                  </button>
                 </div>
               </div>
             ))}

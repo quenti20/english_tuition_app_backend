@@ -84,6 +84,32 @@ const AdminNotes = () => {
     }
   };
 
+  const handleDownload = async (fileUrl, fileName) => {
+    try {
+      const response = await axios.get(fileUrl, {
+        responseType: 'blob', // Fetch the file as a Blob
+      });
+
+      // Create a blob link to trigger download
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+
+      // Create an anchor element to trigger download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${fileName.replace(/\s+/g, '_')}.pdf`; // Add .pdf extension
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    } catch (error) {
+      console.error('Failed to download the file:', error);
+      alert('Failed to download the file. Please try again.');
+    }
+  };
+
   const filteredNotes = notes.filter(
     (note) =>
       (selectedClass === 'all' || note.Class === selectedClass) &&
@@ -154,37 +180,6 @@ const AdminNotes = () => {
         </form>
       </div>
 
-      <div className="mb-6 flex space-x-4">
-        <div>
-          <label className="block font-medium">Filter by Class</label>
-          <select
-            value={selectedClass}
-            onChange={(e) => setSelectedClass(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
-          >
-            {['all', '5', '6', '7', '8', '9', '10', '11', '12'].map((cls) => (
-              <option key={cls} value={cls}>
-                Class {cls}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="block font-medium">Filter by Board</label>
-          <select
-            value={selectedBoard}
-            onChange={(e) => setSelectedBoard(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
-          >
-            {['All', 'WBSE', 'CISCE', 'CBSE'].map((board) => (
-              <option key={board} value={board}>
-                {board}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
       <h2 className="text-xl font-semibold mb-4">Notes List</h2>
       {loading ? (
         <p>Loading...</p>
@@ -206,19 +201,12 @@ const AdminNotes = () => {
                     className="w-32 h-32 object-cover my-2"
                   />
                 )}
-                {note.pdf_file && (
-                  <div>
-                    <p className="text-red-500 text-sm">Disclaimer: On downloading, please attach a ".pdf" extension to the file name. Failing which, the PDF file will not open.</p>
-                    <a
-                      href={note.pdf_file}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 underline"
-                    >
-                      Download PDF
-                    </a>
-                  </div>
-                )}
+                <button
+                  onClick={() => handleDownload(note.pdf_file, note.notes_name)}
+                  className="text-blue-500 underline"
+                >
+                  Download PDF
+                </button>
               </div>
               <div className="space-x-2">
                 <button

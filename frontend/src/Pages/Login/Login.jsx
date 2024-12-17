@@ -27,7 +27,7 @@ const Login = () => {
         localStorage.setItem('user', JSON.stringify(user));
 
         // Navigate based on user role
-        if (user.is_admin && user.attendance == -1) {
+        if (user.is_admin && user.attendance === -1) {
           navigate('/admin');
         } else {
           navigate('/userDashboard');

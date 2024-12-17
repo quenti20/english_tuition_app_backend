@@ -27,7 +27,7 @@ const Newsletter = () => {
 
     // Replace 'YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', 'YOUR_PUBLIC_KEY' with your EmailJS credentials
     emailjs
-      .send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams, 'YOUR_PUBLIC_KEY')
+      .send('service_te8v9wi', 'YOUR_TEMPLATE_ID', templateParams, 'pLYKTeSwQVVFY1nc0')
       .then(
         (response) => {
           console.log('Email sent successfully:', response.status, response.text);
