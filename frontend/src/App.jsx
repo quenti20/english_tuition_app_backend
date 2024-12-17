@@ -34,6 +34,7 @@ import UserNavbar from './Components/UserPage/UserNavbar/UserNavbar';
 import UserSchedule from './Components/UserPage/UserSchedule/UserSchedule';
 import UserNotes from './Components/UserPage/UserNotes/UserNotes';
 import ChangePassword from './Pages/ChangePassword/ChangePassword';
+import FlushLocalStorage from './Components/FlushLocalStorage';
 function App() {
   return (
     <Router>
@@ -46,7 +47,8 @@ function App() {
           <Route 
             path="/" 
             element={
-              <>
+              <>           
+                <FlushLocalStorage/>              
                 <Navbar />
                 <div id="header">
                   <Navbar />
