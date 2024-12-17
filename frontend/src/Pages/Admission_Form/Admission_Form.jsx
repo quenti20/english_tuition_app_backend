@@ -87,7 +87,7 @@ const Admission_Form = () => {
       postData.append('guardian_number', formData.guardian_number);
       postData.append('DOB', formData.DOB.split('-').reverse().join('')); // Convert to ddmmyyyy
       postData.append('payment_ss', formData.payment_ss);
-
+      postData.append('active_status',false)
       try {
         const response = await axios.post('https://english-tuition-app-backend.vercel.app/createUser', postData, {
           headers: { 'Content-Type': 'multipart/form-data' },

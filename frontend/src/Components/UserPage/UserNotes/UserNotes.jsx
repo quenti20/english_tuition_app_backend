@@ -29,7 +29,7 @@ const UserNotes = () => {
     }
 
     const isAdmin = userObject.is_admin;
-    if (isAdmin || !userObject.phone_number || !userObject.guardian_number) {
+    if (isAdmin || !userObject.phone_number || !userObject.guardian_number || userObject.active_status === false) {
       setError('Unauthorized Access.');
       setLoading(false);
       return;

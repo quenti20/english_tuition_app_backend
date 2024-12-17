@@ -64,7 +64,7 @@ const UserNavbar = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/login');
+    navigate('/');
   };
 
   if (loading) {
@@ -219,7 +219,65 @@ const UserNavbar = () => {
         {/* Mobile Navigation Menu */}
         {nav && (
           <ul className="fixed left-0 top-0 w-[60%] h-full border-r border-gray-900 bg-[#000300] ease-in-out duration-500">
-            {/* Mobile Menu Contents */}
+            {/* Profile Section */}
+            <li className="p-4 flex items-center gap-2 bg-gray-800 text-white">
+              <img
+                src={ProfileIcon}
+                alt="Profile"
+                className="w-8 h-8 rounded-full"
+              />
+              <span className="text-sm">{`Welcome, ${userName}`}</span>
+            </li>
+            <li
+              className="p-4 hover:bg-gray-700 text-white"
+              onClick={() => navigate('/user/profile')}
+            >
+              Profile Section
+            </li>
+            <li
+              className="p-4 hover:bg-gray-700 text-white"
+              onClick={() => navigate('/user/change-password')}
+            >
+              Change Password
+            </li>
+            <li
+              className="p-4 hover:bg-gray-700 text-white"
+              onClick={handleLogout}
+            >
+              Logout
+            </li>
+
+            {/* Home */}
+            <li
+              className="p-4 text-white hover:bg-gray-700"
+              onClick={() => navigate('/userDashboard')}
+            >
+              Home
+            </li>
+
+            {/* Admission */}
+            <li
+              className="p-4 text-white hover:bg-gray-700"
+              onClick={() => navigate('/user/schedule')}
+            >
+              Admission
+            </li>
+
+            {/* Resources */}
+            <li
+              className="p-4 text-white hover:bg-gray-700"
+              onClick={() => navigate('/faculty')}
+            >
+              Resources
+            </li>
+
+            {/* Downloads */}
+            <li
+              className="p-4 text-white hover:bg-gray-700"
+              onClick={() => navigate('/user/notes')}
+            >
+              Downloads
+            </li>
           </ul>
         )}
       </div>
