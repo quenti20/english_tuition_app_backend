@@ -22,7 +22,7 @@ const Banner = () => {
 
   return (
     <div
-      className="bg-center w-full py-20 my-14 bg-no-repeat bg-cover relative"
+      className="bg-center w-full py-20 my-20 bg-no-repeat bg-cover relative"
       style={{
         backgroundImage: `url(${bannerImage})`,
       }}

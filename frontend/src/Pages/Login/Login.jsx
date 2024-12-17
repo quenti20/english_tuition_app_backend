@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -46,6 +48,7 @@ const Login = () => {
           <p className="text-red-500 text-center mb-4">{errorMessage}</p>
         )}
         <form onSubmit={handleLogin}>
+          {/* Email Input */}
           <div className="mb-4">
             <label htmlFor="email" className="block text-white font-bold mb-2">
               Email
@@ -59,19 +62,35 @@ const Login = () => {
               required
             />
           </div>
-          <div className="mb-6">
+
+          {/* Password Input */}
+          <div className="mb-2 relative">
             <label htmlFor="password" className="block text-white font-bold mb-2">
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'} // Toggle input type
               id="password"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
               value={password}
               onChange={(e) => setPassword(e.target.value)} 
               required
             />
+            {/* Eye Icon for Show/Hide Password */}
+            <span
+              onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+              className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-400 hover:text-gray-200"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
           </div>
+
+          {/* Disclaimer Below Password */}
+          <p className="text-sm text-gray-300 mb-6">
+            The Password is Your Date of Birth (DOB) in <strong>ddmmyyyy</strong> format unless it is changed by <strong>You</strong> or the <strong>Admin</strong>
+          </p>
+
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"

@@ -24,14 +24,14 @@ const WBSE = () => {
       <Navbar />
 
       {/* Main content area */}
-      <div className="pt-[82px] flex-grow p-6">
+      <div className="pt-[92px] flex-grow p-6">
         <h1 className="text-3xl font-semibold text-center mb-8">WBSE Resources Download</h1>
         
         <div className="max-w-md mx-auto space-y-4">
           {/* Class VI Button */}
           <button
             onClick={() => handleDownload(driveLinks.classVI)}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none"
+            className="w-full px-4 py-2 bg-[#09152E] text-white rounded-lg hover:bg-blue-700 focus:outline-none"
           >
             Class VI - Download
           </button>
@@ -39,7 +39,7 @@ const WBSE = () => {
           {/* Class VII Button */}
           <button
             onClick={() => handleDownload(driveLinks.classVII)}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none"
+            className="w-full px-4 py-2 bg-[#09152E] text-white rounded-lg hover:bg-blue-700 focus:outline-none"
           >
             Class VII - Download
           </button>
@@ -47,7 +47,7 @@ const WBSE = () => {
           {/* Class VIII Button */}
           <button
             onClick={() => handleDownload(driveLinks.classVIII)}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none"
+            className="w-full px-4 py-2 bg-[#09152E] text-white rounded-lg hover:bg-blue-700 focus:outline-none"
           >
             Class VIII - Download
           </button>
@@ -55,7 +55,7 @@ const WBSE = () => {
           {/* Class IX Button */}
           <button
             onClick={() => handleDownload(driveLinks.classIX)}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none"
+            className="w-full px-4 py-2 bg-[#09152E] text-white rounded-lg hover:bg-blue-700 focus:outline-none"
           >
             Class IX - Download
           </button>
@@ -63,7 +63,7 @@ const WBSE = () => {
           {/* Class X Button */}
           <button
             onClick={() => handleDownload(driveLinks.classX)}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none"
+            className="w-full px-4 py-2 bg-[#09152E] text-white rounded-lg hover:bg-blue-700 focus:outline-none"
           >
             Class X - Download
           </button>
@@ -71,7 +71,7 @@ const WBSE = () => {
           {/* Class XI Button */}
           <button
             onClick={() => handleDownload(driveLinks.classXI)}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none"
+            className="w-full px-4 py-2 bg-[#09152E] text-white rounded-lg hover:bg-blue-700 focus:outline-none"
           >
             Class XI - Download
           </button>
@@ -79,7 +79,7 @@ const WBSE = () => {
           {/* Class XII Button */}
           <button
             onClick={() => handleDownload(driveLinks.classXII)}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none"
+            className="w-full px-4 py-2 bg-[#09152E] text-white rounded-lg hover:bg-blue-700 focus:outline-none"
           >
             Class XII - Download
           </button>
