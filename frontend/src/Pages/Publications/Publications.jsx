@@ -35,7 +35,7 @@ const Publications = () => {
       {isAuthenticated ? <UserNavbar /> : <Navbar />}
 
       {/* Main content area */}
-      <div className="pt-[82px] flex-grow p-6">
+      <div className="pt-[96px] flex-grow p-6">
         <h2 className="text-3xl font-bold text-center mb-8 text-[#09152E]">Publications</h2>
 
         {loading ? (

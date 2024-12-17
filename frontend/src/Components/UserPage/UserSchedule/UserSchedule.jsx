@@ -4,9 +4,10 @@ import UserNavbar from '../UserNavbar/UserNavbar';
 import Footer from '../../HomePage/Footer';
 
 const UserSchedule = () => {
-  const [schedule, setSchedule] = useState([]);
+  const [schedules, setSchedules] = useState([]); // All schedules fetched
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [userBoard, setUserBoard] = useState(''); // Store user's board
 
   const apiUrl = 'https://english-tuition-app-backend.vercel.app/getAllSchedules/';
 
@@ -37,16 +38,13 @@ const UserSchedule = () => {
       return;
     }
 
-    const { board } = userObject;
+    setUserBoard(userObject.board); // Save the user's board name
 
     // Fetch schedules from the API
     axios
       .get(apiUrl)
       .then((response) => {
-        const filteredSchedules = response.data.schedules.filter(
-          (schedule) => schedule.board === board
-        );
-        setSchedule(filteredSchedules);
+        setSchedules(response.data.schedules); // Set all schedules
         setLoading(false);
       })
       .catch((error) => {
@@ -56,46 +54,76 @@ const UserSchedule = () => {
       });
   }, []);
 
+  // Group schedules by board
+  const groupByBoard = (data) => {
+    return data.reduce((acc, schedule) => {
+      const { board } = schedule;
+      if (!acc[board]) {
+        acc[board] = [];
+      }
+      acc[board].push(schedule);
+      return acc;
+    }, {});
+  };
+
+  const groupedSchedules = groupByBoard(schedules);
+
   return (
-    <div className="flex flex-col min-h-screen  text-white">
+    <div className="flex flex-col min-h-screen text-white">
       <UserNavbar />
       <div className="pt-[100px] flex-grow p-6">
         <h1 className="text-3xl font-semibold text-center mb-8 text-[#000000]">
-          My Schedule
+          Class Schedules
         </h1>
         {error ? (
           <p className="text-center text-red-500">{error}</p>
         ) : loading ? (
           <p className="text-center text-lg">Loading schedules...</p>
-        ) : schedule.length === 0 ? (
-          <p className="text-center text-gray-300">
-            No schedule available for your board.
-          </p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="table-auto w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-[#1E2A47] text-[#FFD700] uppercase text-sm">
-                  <th className="p-4 border-b border-[#2E3A55]">Class</th>
-                  <th className="p-4 border-b border-[#2E3A55]">Literature Time</th>
-                  <th className="p-4 border-b border-[#2E3A55]">Grammar Time</th>
-                  <th className="p-4 border-b border-[#2E3A55]">Board</th>
-                </tr>
-              </thead>
-              <tbody>
-                {schedule.map((item) => (
-                  <tr
-                    key={item._id}
-                    className="hover:bg-[#1E2A47] transition text-black hover:text-white"
-                  >
-                    <td className="p-4 border-b border-[#2E3A55]">{item.Class}</td>
-                    <td className="p-4 border-b border-[#2E3A55]">{item.literature_time}</td>
-                    <td className="p-4 border-b border-[#2E3A55]">{item.grammer_time}</td>
-                    <td className="p-4 border-b border-[#2E3A55]">{item.board}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div>
+            {/* Display User's Board at the Top */}
+            {userBoard && (
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-[#1E2A47]">
+                  {userBoard} Schedule
+                </h2>
+                <p className="text-lg text-gray-700">
+                  Your Board Schedule
+                </p>
+              </div>
+            )}
+
+            {/* Render Grouped Schedules */}
+            {Object.keys(groupedSchedules).map((board) => (
+              <div key={board} className="mb-8">
+                {/* Board Heading */}
+                <h2 className="text-2xl font-bold mb-4 text-[#1E2A47]">{board}</h2>
+                {/* Table for each Board */}
+                <div className="overflow-x-auto">
+                  <table className="table-auto w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-[#1E2A47] text-[#FFD700] uppercase text-sm">
+                        <th className="p-4 border-b border-[#2E3A55]">Class</th>
+                        <th className="p-4 border-b border-[#2E3A55]">Literature Time</th>
+                        <th className="p-4 border-b border-[#2E3A55]">Grammar Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {groupedSchedules[board].map((item) => (
+                        <tr
+                          key={item._id}
+                          className="hover:bg-[#1E2A47] transition text-black hover:text-white"
+                        >
+                          <td className="p-4 border-b border-[#2E3A55]">{item.Class}</td>
+                          <td className="p-4 border-b border-[#2E3A55]">{item.literature_time}</td>
+                          <td className="p-4 border-b border-[#2E3A55]">{item.grammer_time}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>

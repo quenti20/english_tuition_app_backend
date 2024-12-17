@@ -35,7 +35,7 @@ const Faculty = () => {
       {isAuthenticated ? <UserNavbar /> : <Navbar />}
 
       {/* Main content area */}
-      <div className="pt-[82px] flex-grow p-6">
+      <div className="pt-[84px] flex-grow p-6">
         <h2 className="text-3xl font-bold text-center mb-8 pt-2 text-[#09152E]">Our Faculty</h2>
 
         {loading ? (
@@ -52,7 +52,7 @@ const Faculty = () => {
                 <img
                   src={teacher.image}
                   alt={teacher.name}
-                  className="w-full h-40 object-cover rounded-lg mb-4"
+                  className="w-full h-auto max-h-60 object-contain rounded-lg mb-4"
                 />
 
                 {/* Displaying the Name */}

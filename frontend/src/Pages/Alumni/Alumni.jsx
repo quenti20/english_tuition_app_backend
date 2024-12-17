@@ -52,7 +52,7 @@ const Alumni = () => {
                 <img
                   src={alumni.image}
                   alt={alumni.name}
-                  className="w-full h-40 object-cover rounded-lg mb-4"
+                  className="w-full h-auto max-h-60 object-contain rounded-lg mb-4 "
                 />
 
                 {/* Displaying the Name */}
