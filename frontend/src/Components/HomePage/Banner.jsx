@@ -37,7 +37,7 @@ const Banner = () => {
             loop
             />
         </div>
-        <button className='bg-black text-white p-3 rounded'
+        <button className='bg-black text-white p-3 rounded hover:cursor-pointer'
           onClick={handleGetStarted}
         >Get Started</button>
 

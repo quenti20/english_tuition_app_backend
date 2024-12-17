@@ -108,7 +108,7 @@ const Admission_Form = () => {
       <Navbar />
 
       {/* Main content */}
-      <div className="pt-[82px] flex-grow p-6">
+      <div className="pt-[90px] flex-grow p-6">
         <h1 className="text-3xl font-semibold text-center text-gray-800 mb-8">Admission Form and Payment</h1>
 
         <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-[#09152E] text-white shadow-lg rounded-lg p-6 border border-gray-200">

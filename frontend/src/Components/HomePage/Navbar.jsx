@@ -22,8 +22,17 @@ const Navbar = () => {
     setShowAdmissionDropdown(false);
     setShowResourcesDropdown(false);
     setShowDownloadsDropdown(false);
-    setShowDownloadsDropdown(false);
     setShowProfileDropdown(false);
+  };
+
+  // Function to scroll to the top of the page
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+    setNav(false); // Close mobile nav after click
+    closeDropdowns();
   };
 
   // Function to scroll to the bottom of the page
@@ -43,13 +52,14 @@ const Navbar = () => {
         <div className='flex items-center flex-wrap text-center md:text-left '>
           <img src={Logo} alt="Logo" className='w-12 h-12 mr-2' />
           <h1 className='text-3xl font-bold text-[#f3f6f5] pr-1'>The Linguist </h1>
-          <p className='text-lg text-[#f3f6f5] '> 
-            (formerly <span className='font-bold'>The English Coaching</span> )</p>
+          <p className='text-lg text-[#f3f6f5]'> 
+            (formerly <span className='font-bold'>The English Coaching</span> )
+          </p>
         </div>
 
         {/* Desktop Navigation */}
         <ul className='hidden md:flex gap-4 items-center'>
-          <li className='p-4 cursor-pointer hover:bg-[#f6f8f8] hover:text-black rounded-xl' onClick={() => navigate('/')}>Home</li>
+          <li className='p-4 cursor-pointer hover:bg-[#f6f8f8] hover:text-black rounded-xl' onClick={() => { navigate('/'); scrollToTop(); }}>Home</li>
 
           {/* Admission Dropdown */}
           <li className='relative p-4 cursor-pointer hover:bg-[#f6f8f8] hover:text-black rounded-xl'
@@ -59,9 +69,9 @@ const Navbar = () => {
             Admission
             {showAdmissionDropdown && (
               <ul className='absolute top-full left-0 bg-gray-800 text-white rounded-lg w-40 shadow-lg'>
-                <li className='p-4 hover:bg-gray-700' onClick={() => navigate('/fee-structure')}>Fee Structure</li>
-                <li className='p-2 hover:bg-gray-700' onClick={() => navigate('/schedule-classes')}>Schedule Classes</li>
-                <li className='p-2 hover:bg-gray-700' onClick={() => navigate('/admission-form')}>Admission Form</li>
+                <li className='p-4 hover:bg-gray-700' onClick={() => { navigate('/fee-structure'); scrollToTop(); }}>Fee Structure</li>
+                <li className='p-2 hover:bg-gray-700' onClick={() => { navigate('/schedule-classes'); scrollToTop(); }}>Schedule Classes</li>
+                <li className='p-2 hover:bg-gray-700' onClick={() => { navigate('/admission-form'); scrollToTop(); }}>Admission Form</li>
               </ul>
             )}
           </li>
@@ -74,9 +84,9 @@ const Navbar = () => {
             Resources
             {showResourcesDropdown && (
               <ul className='absolute top-full left-0 bg-gray-800 text-white rounded-lg w-40 shadow-lg'>
-                <li className='p-2 hover:bg-gray-700' onClick={() => navigate('/faculty')}>Faculty</li>
-                <li className='p-2 hover:bg-gray-700' onClick={() => navigate('/publications')}>Publications</li>
-                <li className='p-2 hover:bg-gray-700' onClick={() => navigate('/alumni')}>Prev Year Alumni</li>
+                <li className='p-2 hover:bg-gray-700' onClick={() => { navigate('/faculty'); scrollToTop(); }}>Faculty</li>
+                <li className='p-2 hover:bg-gray-700' onClick={() => { navigate('/publications'); scrollToTop(); }}>Publications</li>
+                <li className='p-2 hover:bg-gray-700' onClick={() => { navigate('/alumni'); scrollToTop(); }}>Prev Year Alumni</li>
               </ul>
             )}
           </li>
@@ -89,9 +99,9 @@ const Navbar = () => {
             Downloads
             {showDownloadsDropdown && (
               <ul className='absolute top-full left-0 bg-gray-800 text-white rounded-lg w-40 shadow-lg'>
-                <li className='p-2 hover:bg-gray-700' onClick={() => navigate('/wbse')}>WBSE</li>
-                <li className='p-2 hover:bg-gray-700' onClick={() => navigate('/cbse')}>CBSE</li>
-                <li className='p-2 hover:bg-gray-700' onClick={() => navigate('/cisce')}>CISCE</li>
+                <li className='p-2 hover:bg-gray-700' onClick={() => { navigate('/wbse'); scrollToTop(); }}>WBSE</li>
+                <li className='p-2 hover:bg-gray-700' onClick={() => { navigate('/cbse'); scrollToTop(); }}>CBSE</li>
+                <li className='p-2 hover:bg-gray-700' onClick={() => { navigate('/cisce'); scrollToTop(); }}>CISCE</li>
               </ul>
             )}
           </li>
@@ -107,8 +117,8 @@ const Navbar = () => {
             <img src={ProfileIcon} alt="Profile" className="w-8 h-8 rounded-full" />
             {showProfileDropdown && (
               <ul className="absolute top-full right-0 bg-gray-800 text-white rounded-lg w-40 shadow-lg">
-                <li className="p-4 hover:bg-gray-700" onClick={() => navigate('/login')}>Login</li>
-                <li className="p-4 hover:bg-gray-700" onClick={() => navigate('/admission-form')}>Signup</li>
+                <li className="p-4 hover:bg-gray-700" onClick={() => { navigate('/login'); scrollToTop(); }}>Login</li>
+                <li className="p-4 hover:bg-gray-700" onClick={() => { navigate('/admission-form'); scrollToTop(); }}>Signup</li>
               </ul>
             )}
           </li>        
@@ -121,68 +131,16 @@ const Navbar = () => {
 
         {/* Mobile Navigation Menu */}
         <ul className={`${nav ? 'fixed' : 'hidden'} md:hidden left-0 top-0 w-[60%] h-full border-r border-gray-900 bg-[#000300] ease-in-out duration-500`}>
-          {/* Mobile Navbar Header with Logo and 'The Linguist' */}
           <div className="flex items-center p-4">
             <img src={Logo} alt="Logo" className='w-12 h-12 mr-2' />
             <h1 className='text-3xl font-bold text-[#eff1f0]'>The Linguist</h1>
           </div>
 
-          <li className='p-4 border-b border-gray-600' onClick={() => navigate('/')}>Home</li>
-          
-          {/* Mobile Profile Dropdown */}
-          <li className="p-4 border-b border-gray-600" onClick={() => setShowProfileDropdown(!showProfileDropdown)}>
-            <div className="flex items-center">
-              <img src={ProfileIcon} alt="Profile" className="w-8 h-8 rounded-full mr-2" />
-              Profile
-            </div>
-            {showProfileDropdown && (
-              <ul className="pl-4">
-                <li className="p-2" onClick={() => navigate('/login')}>Login</li>
-                <li className="p-2" onClick={() => navigate('/admission-form')}>Signup</li>
-              </ul>
-            )}
-          </li>
-
-
-          {/* Mobile Admission Dropdown */}
-          <li className='p-4 border-b border-gray-600' onClick={() => setShowAdmissionDropdown(!showAdmissionDropdown)}>
-            Admission
-            {showAdmissionDropdown && (
-              <ul className='pl-4'>
-                <li className='p-2' onClick={() => navigate('/fee-structure')}>Fee Structure</li>
-                <li className='p-2' onClick={() => navigate('/schedule-classes')}>Schedule Classes</li>
-                <li className='p-2' onClick={() => navigate('/admission-form')}>Admission Form</li>
-              </ul>
-            )}
-          </li>
-
-          {/* Mobile Resources Dropdown */}
-          <li className='p-4 border-b border-gray-600' onClick={() => setShowResourcesDropdown(!showResourcesDropdown)}>
-            Resources
-            {showResourcesDropdown && (
-              <ul className='pl-4'>
-                <li className='p-2' onClick={() => navigate('/faculty')}>Faculty</li>
-                <li className='p-2' onClick={() => navigate('/publications')}>Publications</li>
-                <li className='p-2' onClick={() => navigate('/alumni')}>Prev Year Alumni</li>
-              </ul>
-            )}
-          </li>
-
-          {/* Mobile Downloads Dropdown */}
-          <li className='p-4 border-b border-gray-600' onClick={() => setShowDownloadsDropdown(!showDownloadsDropdown)}>
-            Downloads
-            {showDownloadsDropdown && (
-              <ul className='pl-4'>
-                <li className='p-2' onClick={() => navigate('/wbse')}>WBSE</li>
-                <li className='p-2' onClick={() => navigate('/cbse')}>CBSE</li>
-                <li className='p-2' onClick={() => navigate('/cisce')}>CISCE</li>
-              </ul>
-            )}
-          </li>
-
-          {/* Contact Us Button */}
+          <li className='p-4 border-b border-gray-600' onClick={() => { navigate('/'); scrollToTop(); }}>Home</li>
+          <li className='p-4 border-b border-gray-600' onClick={() => { navigate('/fee-structure'); scrollToTop(); }}>Admission</li>
+          <li className='p-4 border-b border-gray-600' onClick={() => { navigate('/faculty'); scrollToTop(); }}>Resources</li>
+          <li className='p-4 border-b border-gray-600' onClick={() => { navigate('/wbse'); scrollToTop(); }}>Downloads</li>
           <li className='p-4 border-b border-gray-600' onClick={scrollToBottom}>Contact Us</li>
-
         </ul>
       </div>
     </div>

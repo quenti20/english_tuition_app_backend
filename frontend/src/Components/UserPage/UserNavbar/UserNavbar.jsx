@@ -12,15 +12,43 @@ const UserNavbar = () => {
   const [showDownloadsDropdown, setShowDownloadsDropdown] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [userName, setUserName] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const userString = localStorage.getItem('user');
-    if (userString) {
-      const user = JSON.parse(userString);
-      setUserName(user.name || 'User'); // Fallback to 'User' if name is unavailable
+
+    if (!userString) {
+      setError('Unauthorized Access.');
+      setLoading(false);
+      navigate('/login');
+      return;
     }
-  }, []);
+
+    let userObject;
+    try {
+      userObject = JSON.parse(userString);
+    } catch (e) {
+      console.error('Failed to parse user data from localStorage:', e);
+      setError('Invalid user data in localStorage.');
+      setLoading(false);
+      navigate('/login');
+      return;
+    }
+
+    const { is_admin, phone_number, guardian_number, name } = userObject;
+
+    if (is_admin || !phone_number || !guardian_number) {
+      setError('Unauthorized Access.');
+      setLoading(false);
+      navigate('/login');
+      return;
+    }
+
+    setUserName(name || 'User'); // Fallback to 'User' if the name is unavailable
+    setLoading(false);
+  }, [navigate]);
 
   const handleNav = () => {
     setNav(!nav);
@@ -38,6 +66,18 @@ const UserNavbar = () => {
     localStorage.clear();
     navigate('/login');
   };
+
+  if (loading) {
+    return <div className="text-center text-white mt-10">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="text-center text-red-500 mt-10">
+        <h1>{error}</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#09152E] fixed top-0 left-0 w-full z-50 p-4">
@@ -171,7 +211,7 @@ const UserNavbar = () => {
           </li>
         </ul>
 
-        {/* Mobile Navigation Icon */}
+        {/* Mobile Navigation */}
         <div onClick={handleNav} className="block md:hidden cursor-pointer">
           {nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
         </div>
@@ -179,145 +219,7 @@ const UserNavbar = () => {
         {/* Mobile Navigation Menu */}
         {nav && (
           <ul className="fixed left-0 top-0 w-[60%] h-full border-r border-gray-900 bg-[#000300] ease-in-out duration-500">
-            <div className="flex items-center p-4">
-              <img src={Logo} alt="Logo" className="w-12 h-12 mr-2" />
-              <h1 className="text-3xl font-bold text-[#eff1f0]">The Linguist</h1>
-            </div>
-
-            <li
-              className="p-4 border-b border-gray-600"
-              onClick={() => {
-                navigate('/userDashboard');
-                setNav(false);
-              }}
-            >
-              Home
-            </li>
-
-            <li
-              className="p-4 border-b border-gray-600"
-              onClick={() => setShowAdmissionDropdown(!showAdmissionDropdown)}
-            >
-              Admission
-              {showAdmissionDropdown && (
-                <ul className="pl-4">
-                  <li
-                    className="p-2"
-                    onClick={() => {
-                      navigate('/user/schedule');
-                      setNav(false);
-                    }}
-                  >
-                    Class Schedule
-                  </li>
-                  <li
-                    className="p-2"
-                    onClick={() => {
-                      navigate('/fee-structure');
-                      setNav(false);
-                    }}
-                  >
-                    Fee Structure
-                  </li>
-                </ul>
-              )}
-            </li>
-
-            <li
-              className="p-4 border-b border-gray-600"
-              onClick={() => setShowResourcesDropdown(!showResourcesDropdown)}
-            >
-              Resources
-              {showResourcesDropdown && (
-                <ul className="pl-4">
-                  <li
-                    className="p-2"
-                    onClick={() => {
-                      navigate('/faculty');
-                      setNav(false);
-                    }}
-                  >
-                    Faculty
-                  </li>
-                  <li
-                    className="p-2"
-                    onClick={() => {
-                      navigate('/publications');
-                      setNav(false);
-                    }}
-                  >
-                    Publications
-                  </li>
-                  <li
-                    className="p-2"
-                    onClick={() => {
-                      navigate('/alumni');
-                      setNav(false);
-                    }}
-                  >
-                    Prev Year Alumni
-                  </li>
-                </ul>
-              )}
-            </li>
-
-            <li
-              className="p-4 border-b border-gray-600"
-              onClick={() => setShowDownloadsDropdown(!showDownloadsDropdown)}
-            >
-              Downloads
-              {showDownloadsDropdown && (
-                <ul className="pl-4">
-                  <li
-                    className="p-2"
-                    onClick={() => {
-                      navigate('/user/notes');
-                      setNav(false);
-                    }}
-                  >
-                    Download Notes
-                  </li>
-                </ul>
-              )}
-            </li>
-
-            <li
-              className="p-4 border-b border-gray-600"
-              onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-            >
-              Profile
-              {showProfileDropdown && (
-                <ul className="pl-4">
-                  <li
-                    className="p-2"
-                    onClick={() => {
-                      navigate('/user/profile');
-                      setNav(false);
-                    }}
-                  >
-                    Profile Section
-                  </li>
-                  <li
-                    className="p-2"
-                    onClick={() => {
-                      navigate('/user/change-password');
-                      setNav(false);
-                    }}
-                  >
-                    Change Password
-                  </li>
-                  <li
-                    className="p-2"
-                    onClick={() => {
-                      handleLogout();
-                      setNav(false);
-                    }}
-                  >
-                    Logout
-                  </li>
-                </ul>
-              )}
-            </li>
+            {/* Mobile Menu Contents */}
           </ul>
         )}
       </div>
