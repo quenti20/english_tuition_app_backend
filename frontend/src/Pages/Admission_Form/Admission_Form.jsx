@@ -41,9 +41,6 @@ const Admission_Form = () => {
     fetchQrData();
   }, []);
 
-  // Validate email format
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
   // Validate phone number format
   const validatePhoneNumber = (number) => /^\d{10}$/.test(number);
 
@@ -61,10 +58,18 @@ const Admission_Form = () => {
   // Validate form fields
   const validateForm = () => {
     const errors = {};
-    if (!validateEmail(formData.email)) errors.email = 'Invalid email format';
-    if (!validatePhoneNumber(formData.phone_number)) errors.phone_number = 'Phone number must be 10 digits';
-    if (!validatePhoneNumber(formData.guardian_number)) errors.guardian_number = 'Guardian number must be 10 digits';
-    if (!formData.payment_ss) errors.payment_ss = 'Payment screenshot is required';
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Invalid email format';
+    }
+    if (!validatePhoneNumber(formData.phone_number)) {
+      errors.phone_number = 'Phone number must be 10 digits';
+    }
+    if (!validatePhoneNumber(formData.guardian_number)) {
+      errors.guardian_number = 'Guardian number must be 10 digits';
+    }
+    if (!formData.payment_ss) {
+      errors.payment_ss = 'Payment screenshot is required';
+    }
     return errors;
   };
 
@@ -80,14 +85,19 @@ const Admission_Form = () => {
       // Prepare form data
       const postData = new FormData();
       postData.append('name', formData.name);
-      postData.append('email', formData.email);
       postData.append('phone_number', formData.phone_number);
       postData.append('Class', formData.Class);
       postData.append('board', formData.board);
       postData.append('guardian_number', formData.guardian_number);
       postData.append('DOB', formData.DOB.split('-').reverse().join('')); // Convert to ddmmyyyy
       postData.append('payment_ss', formData.payment_ss);
-      postData.append('active_status',false)
+
+      // Only append email if it is provided
+      if (formData.email) {
+        postData.append('email', formData.email);
+      }
+      postData.append('active_status', false);
+
       try {
         const response = await axios.post('https://english-tuition-app-backend.vercel.app/createUser', postData, {
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -135,7 +145,6 @@ const Admission_Form = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              required
               className={`w-full border rounded px-3 py-2 text-black ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
             />
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}

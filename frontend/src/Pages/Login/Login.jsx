@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [emailOrPhone, setemailOrPhone] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
@@ -16,7 +16,7 @@ const Login = () => {
 
     try {
       const res = await axios.post('https://english-tuition-app-backend.vercel.app/login', {
-        email,
+        emailOrPhone,
         password,
       });
 
@@ -50,15 +50,16 @@ const Login = () => {
         <form onSubmit={handleLogin}>
           {/* Email Input */}
           <div className="mb-4">
-            <label htmlFor="email" className="block text-white font-bold mb-2">
-              Email
+            <label htmlFor="text" className="block text-white font-bold mb-2">
+              Email or Phone_Number
             </label>
             <input
-              type="email"
+              type="text"
+              placeholder="Enter email or phone number"
               id="email"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={emailOrPhone}
+              onChange={(e) => setemailOrPhone(e.target.value)}
               required
             />
           </div>
