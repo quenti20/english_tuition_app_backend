@@ -22,12 +22,12 @@ const Newsletter = () => {
     const templateParams = {
       user_email: email,
       admin_email: adminEmail,
-      message: "User is interested in learning English.",
+      message: "This User is interested in learning English.",
     };
 
     // Replace 'YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', 'YOUR_PUBLIC_KEY' with your EmailJS credentials
     emailjs
-      .send('service_te8v9wi', 'YOUR_TEMPLATE_ID', templateParams, 'pLYKTeSwQVVFY1nc0')
+      .send('service_te8v9wi', 'template_xma4v7p', templateParams, 'pLYKTeSwQVVFY1nc0')
       .then(
         (response) => {
           console.log('Email sent successfully:', response.status, response.text);
