@@ -47,7 +47,7 @@ exports.createNewUser = (req, res) => {
             } = req.body;
 
             // Validate required fields
-            if (!name || !email || !phone_number || !Class || !board || !guardian_number || !DOB) {
+            if (!name || !phone_number || !Class || !board || !guardian_number || !DOB) {
                 return res.status(400).json({ message: 'All required fields must be provided' });
             }
 
@@ -171,21 +171,28 @@ exports.getAllUsers = async (req, res) => {
 // User login
 exports.userLogin = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { emailOrPhone, password } = req.body;
 
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Email and password are required' });
+        // Validate input fields
+        if (!emailOrPhone || !password) {
+            return res.status(400).json({ message: 'Email/Phone and password are required' });
         }
 
-        const user = await User.findOne({ email });
+        // Find user by email or phone number
+        const user = await User.findOne({
+            $or: [{ email: emailOrPhone }, { phone_number: emailOrPhone }]
+        }); 
+
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Validate password
         if (user.password !== password) {
             return res.status(401).json({ message: 'Invalid password' });
         }
 
+        // Return user details on successful login
         res.status(200).json({
             message: 'Login successful',
             user: {
@@ -199,7 +206,7 @@ exports.userLogin = async (req, res) => {
                 exam_score: user.exam_score,
                 attendance: user.attendance,
                 is_admin: user.is_admin,
-                active_status:user.active_status
+                active_status: user.active_status
             },
         });
     } catch (error) {
