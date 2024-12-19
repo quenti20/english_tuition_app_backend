@@ -11,7 +11,7 @@ require('dotenv').config();
 app.use(bodyparser.json());
 
 app.use(cors({
-    origin: ['https://english-tuition-app-frontend.vercel.app', 'http://localhost:3000'],  // Add both frontend URLs
+    origin: ['https://english-tuition-app-frontend.vercel.app', 'http://localhost:3000','https://www.thelinguist.co.in'],  // Add both frontend URLs
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
