@@ -6,7 +6,7 @@ const Privacy_Policy = () => {
   return (
     <div className='flex flex-col min-h-screen bg-[#09152E] text-white'>
       <Navbar />
-      <div className='pt-[82px] flex-grow p-6'>
+      <div className='pt-[90px] flex-grow p-6'>
         <h1 className='text-4xl font-semibold text-center mb-8'>Privacy Policy & Terms and Conditions</h1>
 
         {/* Privacy Policy Section */}
